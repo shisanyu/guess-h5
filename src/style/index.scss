@@ -91,13 +91,15 @@ table {
   border-spacing: 0;
 }
 
-html,
-body {
-  height: 100%;
-  overflow: hidden;
-}
-
 * {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  font-size: 0;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  height: 100%;
 }
