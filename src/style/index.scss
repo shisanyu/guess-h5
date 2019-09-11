@@ -57,9 +57,10 @@ video {
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 100%;
   font: inherit;
+  font-size: 0;
   vertical-align: baseline;
+  color: #d7d4de;
 }
 
 // HTML5 display-role reset for older browsers
@@ -101,5 +102,12 @@ table {
 
 html,
 body {
+  height: 100%;
+  overflow: auto;
+  background: #181819;
+  -webkit-overflow-scrolling: touch;
+}
+
+.container{
   height: 100%;
 }
