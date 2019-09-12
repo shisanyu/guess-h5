@@ -215,8 +215,11 @@ export default {
               flex: 1;
             }
             .num {
-              width: 140px;
+              width: 200px;
               text-align: center;
+              height: 100%;
+              line-height: 74px;
+              border-left: 1px solid #8b6c2b /*no*/;
             }
             &:first-child {
               border-bottom: 1px solid #8b6c2b /*no*/;

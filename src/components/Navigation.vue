@@ -53,7 +53,7 @@
 export default {
   data() {
     return {
-      showUserMenu: true
+      showUserMenu: false
     }
   },
   created() {
@@ -61,7 +61,7 @@ export default {
   },
   methods:{
     logout(){
-      this.$router.push('/login');
+      this.$router.replace('/login');
     }
   }
 }
