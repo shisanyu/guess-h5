@@ -107,12 +107,18 @@ body {
   background: #181819;
   -webkit-overflow-scrolling: touch;
 }
+
 input {
   font-size: 24px;
   border: 0;
   background: transparent;
 }
 
-.container{
+img {
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.container {
   height: 100%;
 }

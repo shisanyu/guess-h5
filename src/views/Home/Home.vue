@@ -1,19 +1,19 @@
 <template>
-  <div class="container home">
-    <!-- <div class="swiper">
+  <div class="container home" @scroll="onPageScroll" :style="isFixed?'padding-top:'+fixedHeight +'px':''">
+    <div class="swiper">
       <van-swipe :autoplay="3000" :show-indicators="false">
         <van-swipe-item></van-swipe-item>
         <van-swipe-item></van-swipe-item>
       </van-swipe>
-    </div> -->
-    <div class="navs-box">
+    </div>
+    <div class="navs-box" ref="navsBox" :class="isFixed&&'fixed'" :style="isFixed?'margin-top:'+baseHeight +'px':''">
       <van-tabs v-model="activeGame" line-height="0" :border="false" class="games">
         <van-tab>
           <div slot="title" class="game">
             <img src="../../assets/all.png" alt="">
           </div>
         </van-tab>
-        <van-tab v-for="item in 10">
+        <van-tab v-for="item in 1">
           <div slot="title" class="game">
             <img src="../../assets/game.png" alt="">
           </div>
@@ -30,7 +30,7 @@
     </div>
 
     <ul class="guess-list">
-      <li v-for="item in 10">
+      <li v-for="item in 1">
         <div class="list-tit">
           <img src="../../assets/game.png" alt="" class="tit-logo">
           <span>LOL-TCL LPL/BO1</span>
@@ -62,10 +62,21 @@ export default {
   data() {
     return {
       activeGame: '',
-      activeTab: ''
+      activeTab: '',
+      baseHeight: 0,
+      fixedHeight: 0,
+      isFixed: false
     }
   },
+  mounted() {
+    this.baseHeight = document.getElementById("navigation").offsetHeight;
+    this.fixedHeight = this.$refs.navsBox.offsetHeight;
+  },
   methods: {
+    // 页面滚动
+    onPageScroll(e) {
+      this.isFixed = e.target.scrollTop >= this.fixedHeight;
+    },
     // 改变早盘、滚盘
     changeType(type) {
 
@@ -77,6 +88,8 @@ export default {
 <style lang="scss" scoped>
 @import "@/style/color.scss";
 .container {
+  height: 100%;
+  overflow-y: scroll;
   .swiper {
     height: 327px;
     background-color: #000000;
@@ -85,6 +98,12 @@ export default {
     }
   }
   .navs-box {
+    &.fixed {
+      position: fixed;
+      top: 0;
+      z-index: 99;
+      width: 100%;
+    }
     .games {
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -220,6 +239,6 @@ export default {
 }
 .games >>> .van-tab {
   flex-basis: 106px !important;
-  text-align: left !important;
+  /* text-align: left !important; */
 }
 </style>

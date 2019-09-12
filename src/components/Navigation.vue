@@ -1,8 +1,8 @@
 <template>
-  <div class="navigation">
+  <div class="navigation" id="navigation">
     <div class="nav home" v-if="this.$router.history.current.name=='home'">
       <div class="home-l"><img src="../assets/logo.png" alt=""></div>
-      <div class="home-r"><img src="../assets/user.png" alt=""></div>
+      <div class="home-r" @click="showUserMenu=true;"><img src="../assets/user.png" alt=""></div>
     </div>
     <div class="nav" v-else>
       <div @click="$router.go(-1)" class="nav-l">
@@ -16,21 +16,59 @@
       </div>
     </div>
 
+    <van-popup class="user-menu" v-model="showUserMenu" position="right" :style="{ width: '50%',height: '100%'}">
+      <div class="header">
+        <img src="../assets/ig.png" alt="">
+        <p class="name">Mr.HAP</p>
+        <div class="header-main">
+          <div class="item">
+            <label>余额</label>
+            <p>0.0</p>
+          </div>
+          <div class="item">
+            <label>可提</label>
+            <p>0.0</p>
+          </div>
+          <div class="item">
+            <label>奖金</label>
+            <p>0.0</p>
+          </div>
+        </div>
+      </div>
+      <div class="menu-list">
+        <router-link to="/layout/home" class="link">充值</router-link>
+        <router-link to="/layout/home" class="link">提现</router-link>
+        <router-link to="/layout/home" class="link">投注历史</router-link>
+        <router-link to="/layout/home" class="link">财务流水</router-link>
+        <router-link to="/layout/home" class="link">账号安全</router-link>
+        <router-link to="/layout/home" class="link">系统消息</router-link>
+        <router-link to="/layout/home" class="link">联系客服</router-link>
+      </div>
+      <div class="logout" @click="logout">退出登录</div>
+    </van-popup>
   </div>
 </template>
 
 <script>
 export default {
-  created() {
-    
+  data() {
+    return {
+      showUserMenu: true
+    }
   },
-  watch: {
+  created() {
 
+  },
+  methods:{
+    logout(){
+      this.$router.push('/login');
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@import "@/style/color.scss";
 .navigation {
   position: fixed;
   top: 0;
@@ -80,6 +118,73 @@ export default {
       img {
         width: 56px;
       }
+    }
+  }
+
+  .user-menu {
+    background-color: #252426;
+    .header {
+      text-align: center;
+      padding-top: 45px;
+      img {
+        width: 145px;
+        height: 145px;
+        background-color: #7b757f;
+        border: solid 2px $yellow;
+        border-radius: 50%;
+      }
+      .name {
+        font-size: 26px;
+        color: #d7d4de;
+        margin: 22px 0 40px;
+        text-align: center;
+      }
+      .header-main {
+        display: flex;
+        padding: 0 10px;
+        .item {
+          flex: 1;
+          position: relative;
+          text-align: center;
+          label {
+            font-size: 27px;
+            color: $gray;
+          }
+          p {
+            font-size: 24px;
+            color: $gray;
+            margin-top: 10px;
+          }
+          &:not(:first-child)::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 20px;
+            height: 28px;
+            border-left: 3px solid $gray;
+          }
+        }
+      }
+    }
+    .menu-list {
+      margin-top: 30px;
+      .link {
+        display: block;
+        height: 100px;
+        line-height: 100px;
+        font-size: 24px;
+        color: $gray;
+        padding-left: 60px;
+      }
+    }
+    .logout{
+      position: fixed;
+      bottom: 66px;
+      width: 100%;
+      color: #89868f;
+      font-size: 24px;
+      text-align: right;
+      padding-right: 68px;
     }
   }
 }
