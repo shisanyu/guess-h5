@@ -1,5 +1,6 @@
 <template>
-  <div id="app">
+  <div class="layout">
+    <Navigation></Navigation>
     <keep-alive>
       <transition name="fade-transform" mode="out-in">
         <router-view v-if="$route.meta.keepAlive"></router-view>
@@ -10,18 +11,19 @@
 </template>
 
 <script>
-
-
+import Navigation from '@/components/Navigation.vue'
 export default {
-  
+  components: {
+    Navigation
+  }
 }
 </script>
 
-<style lang="scss">
-@import "./style/index.scss";
-#app{
+<style lang="scss" scoped>
+.layout{
   height: 100%;
   position: relative;
+  padding-top: 107px;
   -webkit-overflow-scrolling: touch;
   overflow-y: auto;
 }
