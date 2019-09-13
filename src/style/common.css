@@ -1,0 +1,27 @@
+/**vant**/
+.van-toast--text .van-toast__text{
+  font-size: 24px;
+  color: #fff;
+}
+/*数字键盘样式star*/
+.van-number-keyboard{
+  background-color: #333333;
+}
+.van-key{
+  color: #fff;
+}
+.van-cell {
+  background-color: #35333b !important;
+  outline:none
+}
+.van-key--gray{
+  background-color: #666;
+}
+.van-field__control {
+  font-size: 29px;
+  color: #fff;
+}
+[class*=van-hairline]::after{
+  border-color: #666;
+}
+/*数字键盘样式end*/
