@@ -10,12 +10,12 @@
       <van-tabs v-model="activeGame" line-height="0" :border="false" class="games">
         <van-tab>
           <div slot="title" class="game">
-            <img src="../../assets/all.png" alt="">
+            <img src="../../assets/all.png" alt />
           </div>
         </van-tab>
         <van-tab v-for="item in 1">
           <div slot="title" class="game">
-            <img src="../../assets/game.png" alt="">
+            <img src="../../assets/game.png" alt />
           </div>
         </van-tab>
       </van-tabs>
@@ -32,7 +32,7 @@
     <ul class="guess-list">
       <li v-for="item in 1">
         <div class="list-tit">
-          <img src="../../assets/game.png" alt="" class="tit-logo">
+          <img src="../../assets/game.png" alt class="tit-logo" />
           <span>LOL-TCL LPL/BO1</span>
         </div>
         <div class="list-main">
@@ -43,30 +43,35 @@
           <div class="main-r">
             <div v-for="item in 2">
               <div class="team">
-                <img src="../../assets/ig.png" alt="">
+                <img src="../../assets/ig.png" alt />
                 <span>IG</span>
               </div>
-              <span class="num">1.33</span>
+              <span class="num" @click="addShopCar(item)">1.33</span>
             </div>
           </div>
         </div>
       </li>
     </ul>
 
+    <!-- 购物车 -->
+    <van-popup v-model="showShopCar" position="bottom" :style="{width:'100%'}" class="shop-car">
+
+    </van-popup>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'home',
+  name: "home",
   data() {
     return {
-      activeGame: '',
-      activeTab: '',
+      activeGame: "",
+      activeTab: "",
       baseHeight: 0,
       fixedHeight: 0,
-      isFixed: false
-    }
+      isFixed: false,
+      showShopCar: true
+    };
   },
   mounted() {
     this.baseHeight = document.getElementById("navigation").offsetHeight;
@@ -78,11 +83,13 @@ export default {
       this.isFixed = e.target.scrollTop >= this.fixedHeight;
     },
     // 改变早盘、滚盘
-    changeType(type) {
-
+    changeType(type) {},
+    // 添加购物车
+    addShopCar(item) {
+      this.showShopCar = true;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -228,6 +235,10 @@ export default {
         }
       }
     }
+  }
+  .shop-car{
+    min-height: 90px;
+    background: $dark;
   }
 }
 </style>
