@@ -53,14 +53,12 @@
       </li>
     </ul>
 
-    <!-- 购物车 -->
-    <van-popup v-model="showShopCar" position="bottom" :style="{width:'100%'}" class="shop-car">
-
-    </van-popup>
+    <guess-car :showPopup="showPopup" @popupClose="showPopup=false"></guess-car>
   </div>
 </template>
 
 <script>
+import GuessCar from "@/components/GuessCar.vue";
 export default {
   name: "home",
   data() {
@@ -70,9 +68,10 @@ export default {
       baseHeight: 0,
       fixedHeight: 0,
       isFixed: false,
-      showShopCar: true
+      showPopup: false,
     };
   },
+  components: { GuessCar },
   mounted() {
     this.baseHeight = document.getElementById("navigation").offsetHeight;
     this.fixedHeight = this.$refs.navsBox.offsetHeight;
@@ -86,7 +85,7 @@ export default {
     changeType(type) {},
     // 添加购物车
     addShopCar(item) {
-      this.showShopCar = true;
+      this.showPopup = true;
     }
   }
 };
@@ -236,10 +235,6 @@ export default {
       }
     }
   }
-  .shop-car{
-    min-height: 90px;
-    background: $dark;
-  }
 }
 </style>
 
@@ -253,6 +248,9 @@ export default {
 }
 .games >>> .van-tab {
   flex-basis: 106px !important;
-  /* text-align: left !important; */
+}
+.submit-btn >>> .van-button__text {
+  color: #252426;
+  font-size: 29px;
 }
 </style>
