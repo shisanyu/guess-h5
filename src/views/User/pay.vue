@@ -57,7 +57,7 @@
       <div class="sure-big-btn" v-else @click="submit">确认支付</div>
     </div>
     <!-- 数字键盘 -->
-    <van-number-keyboard v-model="price" extra-key="." :show="show" safe-area-inset-bottom :maxlength="6" @blur="show = false" />
+    <van-number-keyboard v-model="price" extra-key="." :show="show" safe-area-inset-bottom :maxlength="10" @blur="show = false" />
 
   </div>
 </template>
@@ -178,11 +178,11 @@ export default {
     .content-top {
       width: 100%;
       .content-top-l {
-        color: #8a8791;
+        color: $gray;
         font-size: 25px;
       }
       .content-top-r {
-        color: #fff;
+        color: $gray;
         font-size: 25px;
       }
     }
@@ -195,7 +195,7 @@ export default {
         input {
           padding-left: 28px;
           font-size: 29px;
-          color: #fff;
+          color: $gray;
           height: 93px;
         }
       }
@@ -210,7 +210,7 @@ export default {
           line-height: 80px;
           text-align: center;
           font-size: 27px;
-          color: #fff;
+          color: $gray;
         }
         .price-box:last-child {
           margin-right: 0;
@@ -236,13 +236,13 @@ export default {
     padding: 40px;
     z-index: 20;
     .title-box {
-      color: #fff;
+      color: $gray;
       font-size: 29px;
       text-align: center;
       margin-bottom: 40px;
     }
     p{
-      color: #8a8791;
+      color: $gray;
       font-size: 24px;
       text-align: center;
       margin-bottom: 40px;
@@ -261,7 +261,7 @@ export default {
       margin-bottom: 45px;
       .model-label{
         font-size: 24px;
-        color: #fff;
+        color: $gray;
       }
       .model-price{
         color: #ffc444;
@@ -282,12 +282,12 @@ export default {
       }
       .matter-btn{
         background-color: transparent;
-        color: #fff;
+        color: $gray;
       }
     } 
   }
   .prompt {
-    color: #8a8791;
+    color: $gray;
     font-size: 20px;
     margin-top: 28px;
     line-height: 32px;

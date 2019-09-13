@@ -1,53 +1,80 @@
 <template>
   <div class="container">
-    <div class="card-box between">
-      <div class="card-box-l">
-        <img src="../../assets/icon-card.png" alt="">
-        <span>查看我的银行卡</span>
+    <router-link to="">
+      <div class="card-box between">
+        <div class="card-box-l">
+          <img src="../../assets/icon-card.png" alt="">
+          <span>查看我的银行卡</span>
+        </div>
+        <div class="card-box-r">
+          <img src="../../assets/icon-down.png" alt="">
+        </div>
       </div>
-      <div class="card-box-r">
-        <img src="../../assets/icon-down.png" alt="">
-      </div>
-    </div>
+    </router-link>
     <!-- 充值框 -->
     <div class="content-box">
-      <div class="content-top clearfix">
-        <div class="fl content-top-l">
-          充值金额范围：100-10000
-        </div>
-        <div class="rt content-top-r">
-          账户余额：0.0
+      <div class="content-body content-t between" @click="bankcardModel=true">
+        <div class="content-label">当前选择：</div>
+        <div class="card-num">************345</div>
+        <div class="img-box">
+          <img src="../../assets/icon-down.png" alt="">
         </div>
       </div>
-      <div class="content-body">
-        <div class="input-box">
-          <van-field readonly clickable :value="price" placeholder="请输入充值金额" @touchstart.native.stop="show = true" />
+      <div class="content-body content-c">
+        <p class="content-label">提现金额</p>
+        <div class="content-c-input between">
+          <van-field readonly clickable class="input-box" :value="price" placeholder="请输入充值金额" @touchstart.native.stop="show = true" />
+          <div class="img-box" @click="clearPrice">
+            <img src="../../assets/icon-close2.png" alt="">
+          </div>
         </div>
+      </div>
+      <div class="content-body content-b between">
+        <p class="content-label">当前可提现金额 {{allPrice}}</p>
+        <div class=""></div>
+        <div class="btn" @click="allWithdraw">全部提现</div>
       </div>
     </div>
+    <div class="explain-box">
+      <p class="title-p">提现说明：</p>
+      <p>1.最低金额50，最高金额100000</p>
+      <p>2.正常状态下提现30分钟内到账</p>
+    </div>
     <!-- 充值按钮 -->
-    <div class="sure-big-btn" @click="sureBtn">充值</div>
+    <div class="sure-big-btn" @click="sureBtn">提现</div>
     <div class="prompt">提示：近期充值渠道不太稳定，若遇到充值不成功，请多尝试几次或联系客服，给您带来不便，敬请见谅。</div>
     <!-- 支付确认弹框 -->
     <van-overlay :show="showShopCar" @click="clearModel" />
     <div class="model-box" v-if="showShopCar">
-      <div class="title-box">支付</div>
-      <p v-if="isFinish">你的支付请求已提交</p>
-      <div class="close-btn" @click="clearModel">×</div>
+      <!-- <div class="title-box">支付</div>
+      <div class="close-btn" @click="clearModel">×</div> -->
       <div class="model-text between">
-        <div class="model-label">充值方式：</div>
-        <div class="model-label" v-if='activeTab'>支付宝</div>
-        <div class="model-label" v-else>微信</div>
+        <div class="model-label">提现卡号：</div>
+        <div class="model-label">************345"</div>
       </div>
       <div class="model-text between">
-        <div class="model-label">充值金额：</div>
+        <div class="model-label">提现金额：</div>
         <div class="model-label model-price">{{price}}</div>
       </div>
-      <div class="sure-big-btn"  @click="submit">确认支付</div>
+      <div class="model-text">
+        <div class="model-label">支付密码：</div>
+        <div class="password-box">
+          <!-- 密码输入框 -->
+          <van-password-input :value="password" :length="6" :gutter="10" :focused="showKeyboard" @focus="showKeyboard = true" />
+        </div>
+      </div>
+      <div class="sure-big-btn" @click="submit">确认提现</div>
     </div>
+    <!-- 提现到银行卡选择弹框 -->
+    <van-popup class="bankcard-model" v-model="bankcardModel" position="bottom" :style="{ height: '264px',backgroundColor: '#35333b', }">
+      <div class="picker-box">
+        <van-picker :columns="columns" @change="onChange" show-toolbar title="选择银行卡" @cancel="onCancel" @confirm="onConfirm" />
+      </div>
+    </van-popup>
     <!-- 数字键盘 -->
-    <van-number-keyboard v-model="price" extra-key="." :show="show" safe-area-inset-bottom :maxlength="6" @blur="show = false" />
-
+    <van-number-keyboard v-model="price" extra-key="." :show="show" safe-area-inset-bottom :maxlength="10" @blur="show = false" />
+    <!-- 支付键盘 -->
+    <van-number-keyboard :show="showKeyboard" @input="onInput" @delete="onDelete" @blur="showKeyboard = false" />
   </div>
 </template>
 
@@ -58,36 +85,69 @@ export default {
     return {
       activeGame: "",
       activeTab: 1, //1为支付宝支付，2为微信支付
-      showShopCar: true, //遮罩层
-      price: "200", //金额
+      showShopCar: false, //遮罩层
+      price: "", //金额
       show: false, //控制弹出数字键盘
-      isFinish:false,//判断是否完成
+      allPrice: "200", //可提现的余额
+      bankcardModel: false, //控制银行卡选择的弹框
+      columns: ["杭州", "宁波", "温州", "嘉兴", "湖州"],
+      password: "", //支付密码
+      showKeyboard: false //控制支付密码键盘
     };
   },
   mounted() {},
   methods: {
+    //清空金额
+    clearPrice() {
+      this.price = "";
+    },
+    //点击全部提现
+    allWithdraw() {
+      this.price = this.allPrice;
+    },
     //选择支付方式
     changePay(num) {
       if (this.activeTab != num) {
         this.activeTab = num;
       }
     },
-    //赋值要充值的金额
-    assignment(item) {
-      this.price = item.number;
+    //筛选银行卡
+    onChange(picker, value, index) {},
+    //关闭选择银行卡弹框
+    onCancel() {
+      this.bankcardModel = false;
+    },
+    //点击确认选择银行卡
+    onConfirm(value, index) {
+      this.bankcardModel = false;
+      this.$toast(`当前值：${value}, 当前索引：${index}`);
     },
     //关闭充值弹框
-    clearModel(){
-      this.showShopCar=false;
-      this.isFinish=false;
+    clearModel() {
+      this.showShopCar = false;
+    },
+    //点击输入支付密码
+    onInput(key) {
+      this.password = (this.password + key).slice(0, 6);
+    },
+    //点击删除支付密码
+    onDelete() {
+      this.password = this.password.slice(0, this.password.length - 1);
     },
     //点击充值按钮
     sureBtn() {
       if (!!this.price) {
         if (parseFloat(this.price) <= 10000) {
-          this.showShopCar=true;
+          if (parseFloat(this.price) >= 50) {
+            this.showShopCar = true;
+          } else {
+            this.$toast({
+              duration: 1000,
+              forbidClick: true, // 禁用背景点击
+              message: "输入金额不能小于50"
+            });
+          }
         } else {
-          // this.$toast("输入金额不能大于10000");
           this.$toast({
             duration: 1000,
             forbidClick: true, // 禁用背景点击
@@ -97,73 +157,131 @@ export default {
       }
     },
     //点击确认支付
-    submit(){
-      this.isFinish=true;
+    submit() {
+      this.showShopCar=false;
     },
     //点击支付完成按钮
-    successBtn(){
-      this.$router.replace({path:'/layout/home'})
-    },
+    successBtn() {
+      this.$router.replace({ path: "/layout/home" });
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@/style/color.scss";
+a {
+  display: block;
+}
 .container {
   height: 100%;
   overflow-y: auto;
   padding: 0 40px;
-  .card-box{
+  .card-box {
     height: 108px;
     align-items: center;
-    .card-box-l{
-      img{
-
+    background-color: #35333b;
+    border-radius: 5px;
+    width: 100%;
+    padding: 0 40px;
+    .card-box-l {
+      img {
+        width: 29px;
+        vertical-align: middle;
       }
-      span{
-
+      span {
+        color: $gray;
+        font-size: 24px;
+        margin-left: 70px;
+        vertical-align: middle;
       }
     }
-    .card-box-r{
-      img{
-        transform:rotate(-90deg);
+    .card-box-r {
+      img {
+        transform: rotate(-90deg);
+        width: 25px;
       }
     }
   }
   .content-box {
     margin-top: 130px;
-    .content-top {
-      width: 100%;
-      .content-top-l {
-        color: #8a8791;
-        font-size: 25px;
-      }
-      .content-top-r {
-        color: #fff;
-        font-size: 25px;
+    padding: 0 40px;
+    background-color: #35333b;
+    border-radius: 5px;
+    width: 100%;
+    .content-body {
+      border-bottom: 1px solid $gray;
+      .content-label {
+        color: $gray;
+        font-size: 24px;
       }
     }
-    .content-body {
-      margin-top: 30px;
-      .input-box {
-        width: 100%;
-        background-color: #35333b;
-        border-radius: 3px;
-        input {
-          padding-left: 28px;
-          font-size: 29px;
-          color: #fff;
-          height: 93px;
+    .content-t {
+      height: 110px;
+      display: flex;
+      align-items: center;
+      .card-num {
+        color: $gray;
+        font-size: 24px;
+      }
+      .img-box {
+        img {
+          width: 25px;
         }
       }
+    }
+    .content-c {
+      // height: 165px;
+      p {
+        margin-top: 36px;
+      }
+      .content-c-input {
+        height: 110px;
+        align-items: center;
+        .input-box {
+          width: 90%;
+          padding-left: 0;
+
+          input {
+            font-size: 27px;
+          }
+        }
+        .img-box {
+          width: 10%;
+          text-align: right;
+          img {
+            height: 28px;
+          }
+        }
+      }
+    }
+    .content-b {
+      border: none;
+      height: 110px;
+      align-items: center;
+      .btn {
+        width: 133px;
+        height: 44px;
+        background-color: #ffc444;
+        border-radius: 5px;
+        color: #000;
+        line-height: 44px;
+        text-align: center;
+        font-size: 21px;
+      }
+    }
+  }
+  /*银行卡选择框样式*/
+  .bankcard-model {
+    background-color: #35333b;
+    .picker-box {
+      background-color: #35333b;
     }
   }
   .shop-car {
     height: 100vh;
     background: $opacity-dark;
     padding: 0 40px;
-    
   }
   .model-box {
     position: fixed;
@@ -177,52 +295,76 @@ export default {
     padding: 40px;
     z-index: 20;
     .title-box {
-      color: #fff;
+      color: $gray;
       font-size: 29px;
       text-align: center;
       margin-bottom: 40px;
     }
-    p{
-      color: #8a8791;
+    p {
+      color: $gray;
       font-size: 24px;
       text-align: center;
       margin-bottom: 40px;
     }
     .close-btn {
       position: absolute;
-      top:26px;
+      top: 26px;
       right: 34px;
-      display: block; 
+      display: block;
       color: #ffc444;
       font-size: 50px;
       font-weight: 300;
     }
-    .model-text{
-
+    .model-text {
       margin-bottom: 45px;
-      .model-label{
+      .model-label {
         font-size: 24px;
-        color: #fff;
+        color: $gray;
       }
-      .model-price{
+      .model-price {
         color: #ffc444;
       }
+      .password-box {
+        margin-top: 30px;
+      }
     }
-    .sure-big-btn{
+    .model-text:nth-child(2){
+      border-bottom: 1px solid #d7d4de;
+      padding-bottom: 40px;
+    }
+    .sure-big-btn {
       margin-top: 60px;
     }
   }
-  .prompt {
-    color: #8a8791;
-    font-size: 20px;
+  .explain-box {
+    color: $gray;
+
     margin-top: 28px;
     line-height: 32px;
+    p {
+      font-size: 24px;
+      color: $gray;
+      margin-bottom: 20px;
+    }
+    .title-p {
+      color: $gray;
+      font-size: 21px;
+    }
   }
 }
 </style>
 
 <style lang="css" scoped>
-.container >>> .van-overlay{
+.container >>> .van-overlay {
   z-index: 10;
+}
+.container >>> .van-cell:not(:last-child)::after {
+  border: none;
+}
+.container >>> .van-field__control {
+  font-size: 27px;
+}
+.container >>> .van-popup__close-icon {
+  color: #d7d4de;
 }
 </style>

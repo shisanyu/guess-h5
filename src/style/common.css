@@ -25,7 +25,36 @@
   border-color: #666;
 }
 /*数字键盘样式end*/
-
+/*pickek组件-star*/
+.van-picker-column__item{
+  font-size: 26px;
+  color: #d7d4de;
+}
+.van-picker{
+   background-color: #35333b;
+}
+.van-picker__cancel, .van-picker__confirm{
+  color: #d7d4de;
+}
+[class*=van-hairline]::after{
+}
+.van-picker__mask{
+  background-image: linear-gradient(180deg,rgba(53,51,59,.9),rgba(53,51,59,.7)),linear-gradient(0deg,rgba(53,51,59,.9),rgba(53,51,59,.7));
+}
+/*pickek组件-end*/
+/*密码支付样式-star*/
+.van-password-input{
+  margin: 0;
+}
+.van-password-input__security li{
+  width: 80px;
+  height: 80px;
+  background-color: #36333c;
+}
+.van-password-input__security li i{
+  background-color: #d7d4de;
+}
+/*密码支付样式-end*/
 /* tabs */
 .van-tabs{
   padding: 0 20px;
