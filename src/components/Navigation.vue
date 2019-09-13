@@ -9,7 +9,7 @@
         <img src="../assets/icon-l.png" alt="">
       </div>
       <div class="nav-center">
-        <span>竞猜</span>
+        <span>{{$router.history.current.meta.title}}</span>
       </div>
       <div class="nav-r">
 
@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="menu-list">
-        <router-link to="/layout/home" class="link">充值</router-link>
+        <router-link to="/layout/user/pay" class="link">充值</router-link>
         <router-link to="/layout/home" class="link">提现</router-link>
         <router-link to="/layout/home" class="link">投注历史</router-link>
         <router-link to="/layout/home" class="link">财务流水</router-link>
@@ -57,7 +57,7 @@ export default {
     }
   },
   created() {
-
+    console.log(this.$router)
   },
   methods:{
     logout(){

@@ -122,3 +122,33 @@ img {
 .container {
   height: 100%;
 }
+.clearfix::before,
+.clearfix::after {
+	content: "";
+	height: 0;
+	line-height: 0;
+	display: block;
+	visibility: hidden;
+	clear: both;
+}
+
+.clearfix:after {
+	clear: both;
+}
+
+.clearfix {
+	*zoom: 1;
+	/*IE/7/6*/
+}
+
+.fr {
+	float: right;
+}
+
+.fl {
+	float: left;
+}
+.between{
+  display: flex;
+  justify-content: space-between;
+}
