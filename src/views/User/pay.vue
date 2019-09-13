@@ -23,8 +23,8 @@
       <div class="content-body">
         <div class="input-box">
           <!-- <input type="number" v-model="price" placeholder="请输入充值金额"> -->
-          <van-field readonly clickable :value="price" placeholder="请输入充值金额"  @touchstart.native.stop="show = true" />
-          
+          <van-field readonly clickable :value="price" placeholder="请输入充值金额" @touchstart.native.stop="show = true" />
+
         </div>
         <div class="price-list clearfix">
           <div class="price-box fl" @click="assignment(item)" v-for="(item,i) in priceList" :key="i">{{item.number}}</div>
@@ -34,13 +34,31 @@
     <!-- 充值按钮 -->
     <div class="sure-big-btn" @click="sureBtn">充值</div>
     <div class="prompt">提示：近期充值渠道不太稳定，若遇到充值不成功，请多尝试几次或联系客服，给您带来不便，敬请见谅。</div>
-    <!-- 购物车 -->
-    <van-popup v-model="showShopCar" position="bottom" :style="{width:'100%'}" class="shop-car">
-
-    </van-popup>
+    <!-- 支付确认弹框 -->
+    <van-overlay :show="showShopCar" @click="clearModel" />
+    <div class="model-box" v-if="showShopCar">
+      <div class="title-box">支付</div>
+      <p v-if="isFinish">你的支付请求已提交</p>
+      <div class="close-btn" @click="clearModel">×</div>
+      <div class="model-text between">
+        <div class="model-label">充值方式：</div>
+        <div class="model-label" v-if='activeTab'>支付宝</div>
+        <div class="model-label" v-else>微信</div>
+      </div>
+      <div class="model-text between">
+        <div class="model-label">充值金额：</div>
+        <div class="model-label model-price">{{price}}</div>
+      </div>
+      
+      <div class="btn-box between" v-if="isFinish">
+        <div class="btn sure-big-btn" @click="successBtn">支付完成</div>
+        <div class="btn sure-big-btn matter-btn">支付遇到问题</div>
+      </div>
+      <div class="sure-big-btn" v-else @click="submit">确认支付</div>
+    </div>
     <!-- 数字键盘 -->
     <van-number-keyboard v-model="price" extra-key="." :show="show" safe-area-inset-bottom :maxlength="6" @blur="show = false" />
-    
+
   </div>
 </template>
 
@@ -51,8 +69,8 @@ export default {
     return {
       activeGame: "",
       activeTab: 1, //1为支付宝支付，2为微信支付
-      showShopCar: false, //遮罩层
-      price: "", //金额
+      showShopCar: true, //遮罩层
+      price: "200", //金额
       priceList: [
         { number: "100", id: 1 },
         { number: "200", id: 2 },
@@ -60,7 +78,8 @@ export default {
         { number: "1000", id: 4 },
         { number: "2000", id: 5 }
       ], //金额筛选的项
-      show:false,//控制弹出数字键盘
+      show: false, //控制弹出数字键盘
+      isFinish:false,//判断是否完成
     };
   },
   mounted() {},
@@ -75,20 +94,34 @@ export default {
     assignment(item) {
       this.price = item.number;
     },
+    //关闭充值弹框
+    clearModel(){
+      this.showShopCar=false;
+      this.isFinish=false;
+    },
     //点击充值按钮
     sureBtn() {
       if (!!this.price) {
         if (parseFloat(this.price) <= 10000) {
+          this.showShopCar=true;
         } else {
           // this.$toast("输入金额不能大于10000");
           this.$toast({
-            duration: 1000,  
+            duration: 1000,
             forbidClick: true, // 禁用背景点击
-            message:'输入金额不能大于10000'
+            message: "输入金额不能大于10000"
           });
         }
       }
-    }
+    },
+    //点击确认支付
+    submit(){
+      this.isFinish=true;
+    },
+    //点击支付完成按钮
+    successBtn(){
+      this.$router.replace({path:'/layout/home'})
+    },
   }
 };
 </script>
@@ -186,8 +219,72 @@ export default {
     }
   }
   .shop-car {
-    min-height: 90px;
-    background: $dark;
+    height: 100vh;
+    background: $opacity-dark;
+    padding: 0 40px;
+    
+  }
+  .model-box {
+    position: fixed;
+    width: 89.33333%;
+    min-height: 387px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #252426;
+    border-radius: 5px;
+    padding: 40px;
+    z-index: 20;
+    .title-box {
+      color: #fff;
+      font-size: 29px;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    p{
+      color: #8a8791;
+      font-size: 24px;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .close-btn {
+      position: absolute;
+      top:26px;
+      right: 34px;
+      display: block; 
+      color: #ffc444;
+      font-size: 50px;
+      font-weight: 300;
+    }
+    .model-text{
+
+      margin-bottom: 45px;
+      .model-label{
+        font-size: 24px;
+        color: #fff;
+      }
+      .model-price{
+        color: #ffc444;
+      }
+    }
+    .sure-big-btn{
+      margin-top: 60px;
+    }
+    .btn-box{
+      .btn{
+        border: solid 2px #ffc444;
+        width: 49%;
+        line-height: 76px;
+        margin-top: 15px;
+      }
+      .sure-btn{
+
+      }
+      .matter-btn{
+        background-color: transparent;
+        color: #fff;
+      }
+    } 
   }
   .prompt {
     color: #8a8791;
@@ -199,9 +296,7 @@ export default {
 </style>
 
 <style lang="css" scoped>
-
-.games >>> .van-tab {
-  flex-basis: 106px !important;
-  /* text-align: left !important; */
+.container >>> .van-overlay{
+  z-index: 10;
 }
 </style>
