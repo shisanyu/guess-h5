@@ -10,7 +10,16 @@
         <i></i>
       </div>
     </div>
-
+    <div class="content-box">
+      <div class="content-top clearfix">
+        <div class="fl content-top-l">
+          充值金额范围：100-10000
+        </div>
+        <div class="rt content-top-r">
+          账户余额：0.0
+        </div>
+      </div>
+    </div>
     <!-- 购物车 -->
     <van-popup v-model="showShopCar" position="bottom" :style="{width:'100%'}" class="shop-car">
 
@@ -101,6 +110,19 @@ export default {
     .active{
       i{
         display: block;
+      }
+    }
+  }
+  .content-box{
+    .content-top{
+      width: 100%;
+      .content-top-l{
+        color: #8a8791;
+        font-size: 24px;
+      }
+      .content-top-r{
+        color: #fff;
+        font-size: 25px;
       }
     }
   }
