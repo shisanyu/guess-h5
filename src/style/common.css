@@ -25,3 +25,26 @@
   border-color: #666;
 }
 /*数字键盘样式end*/
+
+/* tabs */
+.van-tabs{
+  padding: 0 20px;
+  background-color: #252426 !important;
+}
+.van-tabs .van-tabs__nav{
+  background-color: #252426 !important;
+}
+.van-tabs .van-ellipsis{
+  font-size: 24px;
+}
+.van-tabs .van-tab--active .van-ellipsis{
+  color: #ffc444;
+}
+.van-tabs .van-tabs__line{
+  background-color: #ffc444;
+  bottom: 44px;
+}
+.van-tabs__wrap--scrollable .van-tab{
+  flex: 0 0 20% !important;
+  flex-basis: 20%;
+}
