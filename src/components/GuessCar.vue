@@ -31,15 +31,15 @@
       </ul>
       <div class="keyboard" v-if="showKeyboard">
         <div class="num-box">
-          <span v-for="item in numArr">{{item}}</span>
+          <span v-for="item in numArr" @click="inputNum(false,item)">{{item}}</span>
         </div>
         <div class="key-bottom">
-          <span>500</span>
-          <span>1000</span>
-          <span class="icon-jt" @click="showKeyboard=false;keyboardValue=0;">
+          <span @click="inputNum(true,500)">500</span>
+          <span @click="inputNum(true,1000)">1000</span>
+          <span class="icon-jt" @click="unInput">
             <img src="../assets/jt.png" alt />
           </span>
-          <span class="sure">确认</span>
+          <span class="sure" @click="sureInput">确认</span>
         </div>
       </div>
       <van-button size="large" color="#ffc444" class="submit-btn">确认投注 1 RMB</van-button>
@@ -59,7 +59,7 @@ export default {
       numArr: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
       showGuessCar: this.showPopup,
       showKeyboard: false,
-      keyboardValue:0
+      keyboardValue: 0
     };
   },
   methods: {
@@ -68,13 +68,25 @@ export default {
       this.$emit("popupClose", false);
     },
     // 关闭键盘
-    openKeybroad(val){
+    openKeybroad(val) {
       this.keyboardValue = val;
       this.showKeyboard = true;
     },
     // 删除数据
-    deleteItem(item,index){
-
+    deleteItem(item, index) {},
+    // 数字点击输入
+    inputNum(clear, num) {
+      if(!this.keyboardValue){this.keyboardValue=''}
+      this.keyboardValue = clear ? num : this.keyboardValue + "" + num;
+    },
+    // 输入删除
+    unInput() {
+      this.keyboardValue = this.keyboardValue + '';
+      this.keyboardValue = this.keyboardValue.substring(0,this.keyboardValue.length-1);
+    },
+    // 输入确认
+    sureInput(){
+      this.showKeyboard = false;
     }
   },
   watch: {
@@ -198,7 +210,7 @@ export default {
         color: $gray;
         border-left: 1px solid $yellow;
         border-bottom: 1px solid $yellow;
-        &:first-child{
+        &:first-child {
           border-left: 0;
         }
       }
@@ -212,7 +224,7 @@ export default {
             width: 34px;
           }
         }
-        .sure{
+        .sure {
           width: 20%;
         }
       }

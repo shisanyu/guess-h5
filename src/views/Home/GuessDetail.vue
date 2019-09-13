@@ -38,22 +38,21 @@
     </van-tabs>
 
     <div class="table-box">
-      <table class="table">
-        <thead>
-          <tr>
-            <th class="table-title">全场</th>
-            <th>RW</th>
-            <th>IG</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in 2">
-            <td class="table-title">获得比赛胜利</td>
-            <td>1.62</td>
-            <td>2.17</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="tables" :class="list.length>3?'my-table-over':''">
+        <div class="my-table">
+          <ul class="title-ul clearfix">
+            <li class="tit">全场</li>
+            <li v-for="item in list">RW</li>
+          </ul>
+          <ul class="list-ul clearfix">
+            <li class="tit">获得比赛胜利</li>
+            <li v-for="item in list" class="win">1.62</li>
+          </ul>
+        </div>
+        <div class="over-jt" v-if="list.length>3">
+          <img src="../../assets/icon-sjx.png" alt />
+        </div>
+      </div>
     </div>
 
     <guess-car :showPopup="showPopup" @popupClose="showPopup=false;"></guess-car>
@@ -66,7 +65,8 @@ export default {
   data() {
     return {
       showPopup: false,
-      activeTab: 0
+      activeTab: 0,
+      list: [1, 2, 3, 4, 5, 6, 7, 8]
     };
   },
   components: { GuessCar }
@@ -143,35 +143,80 @@ export default {
     }
   }
   .table-box {
-    table {
-      width: 100%;
-      thead {
-        tr {
-          background: $yellow;
-          th{
-            font-size: 24px;
-            height: 84px;
-            line-height: 84px;
-            color: $black;
-            border-left: 1px solid $black;
-          }
-        }
-      }
-      tbody{
-        tr{
-          background: $deep-yellow;
-          td{
+    .tables {
+      .my-table {
+        ul {
+          display: flex;
+          li {
+            flex: 1;
             height: 108px;
-            border-top: 1px solid $black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-left: 1px solid $black;
+            border-bottom: 1px solid $black;
+            background: $deep-yellow;
             font-size: 24px;
-            line-height: 108px;
-            text-align: center;
+            color: $gray;
+            &.win{
+              position: relative;
+            }
+            &.win::after{
+              content: '';
+              width: 50px;
+              height: 16px;
+              position: absolute;
+              background: url(~@/assets/win.png) no-repeat;
+              background-size: 100% 100%;
+              transform: translateX(60px)
+            }
           }
         }
+        .title-ul {
+          li {
+            height: 84px;
+            color: $black;
+            background: $yellow;
+          }
+        }
+        .tit {
+          flex: 0 0 244px !important;
+        }
       }
-      .table-title{
-        width: 244px;
+      &.my-table-over {
+        position: relative;
+        .my-table {
+          overflow-x: auto;
+          margin-right: 40px;
+          ul {
+            display: block;
+            white-space: nowrap;
+            overflow-x: initial;
+            li {
+              display: inline-flex;
+              width: 176px;
+            }
+            .tit {
+              width: 244px;
+              flex: 0 0 244px !important;
+            }
+          }
+        }
+        .over-jt {
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          width: 40px;
+          background: $yellow;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-left: 1px solid $black;
+          img {
+            width: 14px;
+          }
+        }
       }
     }
   }

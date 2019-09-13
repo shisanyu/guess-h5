@@ -13,7 +13,7 @@
             <img src="../../assets/all.png" alt />
           </div>
         </van-tab>
-        <van-tab v-for="item in 1">
+        <van-tab v-for="item in 10">
           <div slot="title" class="game">
             <img src="../../assets/game.png" alt />
           </div>
@@ -68,7 +68,7 @@ export default {
       baseHeight: 0,
       fixedHeight: 0,
       isFixed: false,
-      showPopup: false,
+      showPopup: false
     };
   },
   components: { GuessCar },
@@ -116,6 +116,7 @@ export default {
       background: #252426;
       width: 100%;
       overflow-x: auto;
+      padding: 0;
       .game {
         height: 53px;
         display: inline-block;
@@ -248,6 +249,7 @@ export default {
 }
 .games >>> .van-tab {
   flex-basis: 106px !important;
+  flex: none;
 }
 .submit-btn >>> .van-button__text {
   color: #252426;
