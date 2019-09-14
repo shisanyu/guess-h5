@@ -70,8 +70,8 @@ export default {
   data() {
     return {
       showUserMenu: false,
-      showDatePicker:true,
-      showCalendar:true,
+      showDatePicker:false,
+      showCalendar:false,
       value1: "",
       option1: [
         { text: "全部商品", value: 0 },
