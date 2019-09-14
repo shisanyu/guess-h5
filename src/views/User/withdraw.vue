@@ -96,6 +96,9 @@ export default {
       showKeyboard: false //控制支付密码键盘
     };
   },
+  created(){
+    this.$store.commit("setPageTitle","提现");
+  },
   mounted() {},
   methods: {
     //清空金额

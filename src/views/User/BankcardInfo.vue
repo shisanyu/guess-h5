@@ -36,6 +36,9 @@ export default {
 
     };
   },
+  created(){
+    this.$store.commit("setPageTitle","银行卡");
+  },
   mounted() {},
   methods: {
     //跳转编辑页面
@@ -66,7 +69,9 @@ a {
       width: 200px;
     }
     .label-content{
-
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
   .sure-big-btn{

@@ -82,6 +82,9 @@ export default {
       isFinish:false,//判断是否完成
     };
   },
+  created(){
+    this.$store.commit("setPageTitle","充值");
+  },
   mounted() {},
   methods: {
     //选择支付方式
