@@ -26,6 +26,10 @@ export default new Router({
         {path:'/layout/SystemMsg',name:'SystemMsg',component: () => import('@/views/User/SystemMsg.vue'),meta: { keepAlive: true ,title:'系统消息',}},
         //用户中心-提现
         {path:'/layout/withdraw',name:'withdraw',component: () => import('@/views/User/withdraw.vue'),meta: { keepAlive: true ,title:'提现',}},
+        //用户中心-银行卡详情表
+        {path:'/layout/BankcardInfo',name:'BankcardInfo',component: () => import('@/views/User/BankcardInfo.vue'),meta: { keepAlive: true ,title:'银行卡',}},
+        //用户中心-银行卡详情表
+        {path:'/layout/BankcardEdit',name:'BankcardEdit',component: () => import('@/views/User/BankcardEdit.vue'),meta: { keepAlive: true ,title:'编辑银行卡',}},
       ]
     },
     /*******登录********/

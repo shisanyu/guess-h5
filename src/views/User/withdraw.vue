@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <router-link to="">
+    <router-link to="/layout/BankcardInfo">
       <div class="card-box between">
         <div class="card-box-l">
           <img src="../../assets/icon-card.png" alt="">
@@ -13,12 +13,13 @@
     </router-link>
     <!-- 充值框 -->
     <div class="content-box">
-      <div class="content-body content-t between" @click="bankcardModel=true">
-        <div class="content-label">当前选择：</div>
+      <div class="content-body content-t between" >
+        <!-- @click="bankcardModel=true" -->
+        <div class="content-label">银行卡号：</div>
         <div class="card-num">************345</div>
-        <div class="img-box">
+        <!-- <div class="img-box">
           <img src="../../assets/icon-down.png" alt="">
-        </div>
+        </div> -->
       </div>
       <div class="content-body content-c">
         <p class="content-label">提现金额</p>
@@ -80,7 +81,7 @@
 
 <script>
 export default {
-  name: "pay",
+  name: "withdraw",
   data() {
     return {
       activeGame: "",
@@ -329,7 +330,7 @@ a {
       }
     }
     .model-text:nth-child(2){
-      border-bottom: 1px solid #d7d4de;
+      border-bottom: 1px solid $border-color;
       padding-bottom: 40px;
     }
     .sure-big-btn {
