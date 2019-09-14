@@ -1,8 +1,16 @@
 <template>
   <div class="container guess-history">
-    <van-tabs class="tabs" v-model="activeTab" :border="false">
-      <van-tab title="未结算"></van-tab>
-      <van-tab title="已结算"></van-tab>
+    <van-tabs class="tabs games" v-model="activeTab" :border="false">
+      <van-tab>
+        <div slot="title" class="game">
+          <img src="../../assets/all.png" alt />
+        </div>
+      </van-tab>
+      <van-tab v-for="item in 10">
+        <div slot="title" class="game">
+          <img src="../../assets/game.png" alt />
+        </div>
+      </van-tab>
     </van-tabs>
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="getList">
       <ul class="guess-list">
@@ -21,6 +29,7 @@
                 <div class="team">
                   <img src="../../assets/ig.png" alt />
                   <span>IG</span>
+                  <img src="../../assets/win.png" alt class="win" />
                 </div>
                 <span class="num" @click="addShopCar(item)">1.33</span>
               </div>
@@ -38,20 +47,20 @@ export default {
   data() {
     return {
       activeTab: "",
-      loading:false,
-      finished:false,
-      listData:[1,2,3,4,5,6,7,8,9,0]
+      loading: false,
+      finished: false,
+      listData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
     };
   },
   created() {
-    this.$store.commit("setPageTitle","投注历史");
+    this.$store.commit("setPageTitle", "赛果");
   },
   methods: {
-    getList(){
-      setTimeout(()=>{
-        this.listData = this.listData.concat([1,2,3,4,5,6,7,8,9,0]);
-        this.loading=false;
-      },500)
+    getList() {
+      setTimeout(() => {
+        this.listData = this.listData.concat([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
+        this.loading = false;
+      }, 500);
     }
   }
 };
@@ -60,6 +69,25 @@ export default {
 <style lang="scss" scoped>
 @import "@/style/color.scss";
 .container {
+  padding-top: 100px;
+  .games {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: #252426;
+    width: 100%;
+    overflow-x: auto;
+    padding: 0;
+    position: fixed;
+    top: 100px;
+    left: 0;
+    .game {
+      height: 53px;
+      display: inline-block;
+      img {
+        height: 100%;
+      }
+    }
+  }
   .guess-list {
     padding: 27px 27px 0;
     li {
@@ -114,6 +142,12 @@ export default {
               color: #fff1d3;
               vertical-align: middle;
             }
+            .win {
+              float: right;
+              width: 64px;
+              height: auto;
+              margin-right: 60px;
+            }
             .team {
               flex: 1;
             }
@@ -135,8 +169,15 @@ export default {
 }
 </style>
 <style scoped>
->>> .van-tab{
+.games >>> .van-tabs__nav {
+  background: transparent;
+  padding: 24px 27px;
+}
+.games >>> .van-tabs__wrap {
+  height: 100px;
+}
+.games >>> .van-tab {
+  flex-basis: 106px !important;
   flex: none;
-  margin-right: 100px;
 }
 </style>
