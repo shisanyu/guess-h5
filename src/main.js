@@ -6,8 +6,10 @@ import store from './store/index'
 import Vant from 'vant';
 import 'vant/lib/index.css';
 import '@/style/common.css';
+import VueBetterCalendar from 'vue-better-calendar'
 
 Vue.use(Vant);
+Vue.use(VueBetterCalendar)
 Vue.config.productionTip = false
 
 new Vue({

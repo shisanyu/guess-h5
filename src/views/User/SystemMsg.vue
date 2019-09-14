@@ -21,6 +21,9 @@ export default {
       finished: false
     };
   },
+  created(){
+    this.$store.commit("setPageTitle","系统消息");
+  },
   methods: {
     getList() {
 

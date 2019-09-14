@@ -43,7 +43,9 @@ export default {
       listData:[1,2,3,4,5,6,7,8,9,0]
     };
   },
-  created() {},
+  created() {
+    this.$store.commit("setPageTitle","投注历史");
+  },
   methods: {
     getList(){
       setTimeout(()=>{

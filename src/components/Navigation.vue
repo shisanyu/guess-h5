@@ -1,24 +1,38 @@
 <template>
   <div class="navigation" id="navigation">
     <div class="nav home" v-if="this.$router.history.current.name=='home'">
-      <div class="home-l"><img src="../assets/logo.png" alt=""></div>
-      <div class="home-r" @click="showUserMenu=true;"><img src="../assets/user.png" alt=""></div>
+      <div class="home-l">
+        <img src="../assets/logo.png" alt />
+      </div>
+      <div class="home-r" @click="showUserMenu=true;">
+        <img src="../assets/user.png" alt />
+      </div>
     </div>
     <div class="nav" v-else>
       <div @click="$router.go(-1)" class="nav-l">
-        <img src="../assets/icon-l.png" alt="">
+        <img src="../assets/icon-l.png" alt />
       </div>
       <div class="nav-center">
-        <span>{{$router.history.current.meta.title}}</span>
+        <span>{{$store.state.pageTitle}}</span>
       </div>
       <div class="nav-r">
-
+        <div class="nav-r-box">
+          <div class="nav-r-btn">
+            <span>{{selectTime}}</span>
+            <img src="../assets/icon-down-y.png" alt="">
+          </div>
+          <ul class="nav-r-menu">
+            <li>24小时</li>
+            <li>48小时</li>
+            <li>自定义</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <van-popup class="user-menu" v-model="showUserMenu" position="right" :style="{ width: '50%',height: '100%'}">
       <div class="header">
-        <img src="../assets/ig.png" alt="">
+        <img src="../assets/ig.png" alt />
         <p class="name">Mr.HAP</p>
         <div class="header-main">
           <div class="item">
@@ -53,18 +67,25 @@
 export default {
   data() {
     return {
-      showUserMenu: false
-    }
+      showUserMenu: false,
+      value1: "",
+      option1: [
+        { text: "全部商品", value: 0 },
+        { text: "新款商品", value: 1 },
+        { text: "活动商品", value: 2 }
+      ],
+      selectTime:"24小时"
+    };
   },
   created() {
-    console.log(this.$router)
+    console.log(this.$router);
   },
-  methods:{
-    logout(){
-      this.$router.replace('/login');
+  methods: {
+    logout() {
+      this.$router.replace("/login");
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -91,6 +112,7 @@ export default {
     .nav-l {
       width: 100px;
       padding-left: 30px;
+      margin-right: 100px;
       img {
         width: 18px;
       }
@@ -100,11 +122,57 @@ export default {
       justify-content: center;
       text-align: center;
       span {
-        font-size: 33px;
+        font-size: 34px;
       }
     }
     .nav-r {
-      width: 100px;
+      width: 200px;
+      padding-right: 30px;
+      text-align: right;
+      .nav-r-box{
+        position: relative;
+        width: 200px;
+        .nav-r-btn{
+          text-align: right;
+          span{
+            font-size: 24px;
+            margin-right: 8px;
+            vertical-align: middle;
+          }
+          img{
+            width: 14px;
+            vertical-align: middle;
+          }
+        }
+        .nav-r-menu{
+          position: absolute;
+          width: 160px;
+          height: 210px;
+          background: #35333b;
+          text-align: center;
+          top: 66px;
+          right: 0px;
+          overflow: inherit;
+          &::before{
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            left: 50%;
+            border:16px solid transparent;
+            border-bottom: 16px solid #35333b;
+            top: -32px;
+            transform: translateX(-50%);
+            z-index: 100;
+          }
+          li{
+            height: 70px;
+            line-height: 70px;
+            font-size: 24px;
+            border-bottom: 1px solid $opacity-dark;
+          }
+        }
+      }
     }
     .home-l {
       padding-left: 30px;
@@ -177,7 +245,7 @@ export default {
         padding-left: 60px;
       }
     }
-    .logout{
+    .logout {
       position: fixed;
       bottom: 66px;
       width: 100%;

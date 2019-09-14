@@ -72,6 +72,9 @@ export default {
     };
   },
   components: { GuessCar },
+  created(){
+    this.$store.commit("setPageTitle","首页",true)
+  },
   mounted() {
     this.baseHeight = document.getElementById("navigation").offsetHeight;
     this.fixedHeight = this.$refs.navsBox.offsetHeight;
