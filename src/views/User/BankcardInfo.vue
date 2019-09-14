@@ -57,13 +57,15 @@ a {
 .container {
   padding: 0 40px;
   .list-box{
-    height: 100px;
+    // height: 100px;
     display: flex;
     border-bottom: 1px solid $border-color;
     align-items: center;
     .label-text,.label-content{
       color: $gray;
       font-size: 27px;
+      height: 100px;
+      line-height: 100px;
     }
     .label-text{
       width: 200px;
@@ -72,6 +74,7 @@ a {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      flex: 1;
     }
   }
   .sure-big-btn{
