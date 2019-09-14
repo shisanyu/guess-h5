@@ -118,7 +118,29 @@ img {
   -o-object-fit: cover;
   object-fit: cover;
 }
-
+input::-webkit-input-placeholder,
+  textarea::-webkit-input-placeholder {
+    /* WebKit browsers */
+    color: #777;
+  }
+ 
+  input:-moz-placeholder,
+  textarea:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: #777;
+  }
+ 
+  input::-moz-placeholder,
+  textarea::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #777;
+  }
+ 
+  input:-ms-input-placeholder,
+  textarea:-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: #777;
+  }
 .container {
   height: 100%;
 }

@@ -51,11 +51,11 @@
       </div>
       <div class="menu-list">
         <router-link to="/layout/pay" class="link">充值</router-link>
-        <router-link to="/layout/home" class="link">提现</router-link>
+        <router-link to="/layout/withdraw" class="link">提现</router-link>
         <router-link to="/layout/GuessHistory" class="link">投注历史</router-link>
         <router-link to="/layout/home" class="link">财务流水</router-link>
         <router-link to="/layout/home" class="link">账号安全</router-link>
-        <router-link to="/layout/home" class="link">系统消息</router-link>
+        <router-link to="/layout/SystemMsg" class="link">系统消息</router-link>
         <router-link to="/layout/home" class="link">联系客服</router-link>
       </div>
       <div class="logout" @click="logout">退出登录</div>
