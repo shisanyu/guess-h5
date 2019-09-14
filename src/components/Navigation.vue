@@ -61,7 +61,7 @@
       <div class="logout" @click="logout">退出登录</div>
     </van-popup>
 
-    <vue-better-calendar v-show="showCalendar" mode="range" ref="calendar" :showLunar="false" :hasLine="false" :disableBeforeToday="true" @select-range-date="selectDate"></vue-better-calendar>
+    <vue-better-calendar v-show="showCalendar" mode="range" ref="calendar" ctlColor="#ffc444" :showLunar="false" :hasLine="false" :disableAfterToday="true" @select-range-date="selectDate"></vue-better-calendar>
   </div>
 </template>
 
@@ -70,8 +70,8 @@ export default {
   data() {
     return {
       showUserMenu: false,
-      showCalendar:false,
-      showDatePicker:false,
+      showDatePicker:true,
+      showCalendar:true,
       value1: "",
       option1: [
         { text: "全部商品", value: 0 },
@@ -270,9 +270,47 @@ export default {
 
 <style scoped>
 .vue-better-calendar{
-  background: #443921;
+  background: #35333b;
+}
+.vue-better-calendar >>> .calendar-header .year span{
+  color: #d7d4de !important;
+  font-size: 24px !important;
 }
 .vue-better-calendar >>> .weekday span{
   font-size: 28px;
+}
+.vue-better-calendar >>> .calendar-day {
+  background: #252426 !important;
+}
+.vue-better-calendar >>> .calendar-day.disabled {
+  background: #444 !important;
+}
+.vue-better-calendar >>> .calendar-body .text-day{
+  font-size: 28px;
+  color: #d7d4de !important;
+}
+.vue-better-calendar >>> .calendar-body .calendar-dates{
+  background-color: #35333b;
+}
+.vue-better-calendar >>> .calendar-day.selected:after{
+  border-color: #ffc444 !important;
+}
+.vue-better-calendar >>> .calendar-year-panel{
+  background-color: #35333b;
+}
+.vue-better-calendar >>> .calendar-year-panel .item-year {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vue-better-calendar >>> .calendar-year-panel .item-year span{
+  font-size: 24px;
+}
+.vue-better-calendar >>> .calendar-year-panel .item-year.active{
+  background: #ffc444;
+  border-color: #ffc444;
+}
+.vue-better-calendar >>> .calendar-year-panel .item-year.active span{
+  color: #252426;
 }
 </style>
