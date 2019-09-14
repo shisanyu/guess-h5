@@ -16,7 +16,7 @@
         <span>{{$store.state.pageTitle}}</span>
       </div>
       <div class="nav-r">
-        <div class="nav-r-box">
+        <div class="nav-r-box" v-if="showDatePicker">
           <div class="nav-r-btn">
             <span>{{selectTime}}</span>
             <img src="../assets/icon-down-y.png" alt="">
@@ -60,6 +60,8 @@
       </div>
       <div class="logout" @click="logout">退出登录</div>
     </van-popup>
+
+    <vue-better-calendar v-show="showCalendar" mode="range" ref="calendar" :showLunar="false" :hasLine="false" :disableBeforeToday="true" @select-range-date="selectDate"></vue-better-calendar>
   </div>
 </template>
 
@@ -68,6 +70,8 @@ export default {
   data() {
     return {
       showUserMenu: false,
+      showCalendar:false,
+      showDatePicker:false,
       value1: "",
       option1: [
         { text: "全部商品", value: 0 },
@@ -81,8 +85,14 @@ export default {
     console.log(this.$router);
   },
   methods: {
+    // 登出
     logout() {
       this.$router.replace("/login");
+    },
+    // 时间选择回调
+    selectDate(dateList){
+      console.log(dateList);
+      
     }
   }
 };
@@ -255,5 +265,14 @@ export default {
       padding-right: 68px;
     }
   }
+}
+</style>
+
+<style scoped>
+.vue-better-calendar{
+  background: #443921;
+}
+.vue-better-calendar >>> .weekday span{
+  font-size: 28px;
 }
 </style>
