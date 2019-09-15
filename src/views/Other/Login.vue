@@ -59,7 +59,7 @@ export default {
       login:{
 
       },
-      isRegister:true, // 是否注册
+      isRegister:false, // 是否注册
     }
   },
   methods:{

@@ -1,6 +1,6 @@
 <template>
   <div class="navigation" id="navigation">
-    <div class="nav home" v-if="this.$router.history.current.name=='home'">
+    <div class="nav home" v-if="$store.state.pageTitle=='首页'">
       <div class="home-l">
         <img src="../assets/logo.png" alt />
       </div>
@@ -50,13 +50,13 @@
         </div>
       </div>
       <div class="menu-list">
-        <router-link to="/layout/pay" class="link">充值</router-link>
-        <router-link to="/layout/withdraw" class="link">提现</router-link>
-        <router-link to="/layout/GuessHistory" class="link">投注历史</router-link>
-        <router-link to="/layout/stream" class="link">财务流水</router-link>
-        <router-link to="/layout/home" class="link">账号安全</router-link>
-        <router-link to="/layout/SystemMsg" class="link">系统消息</router-link>
-        <router-link to="/layout/home" class="link">联系客服</router-link>
+        <div @click='goToRouterLink("/layout/pay")' class="link">充值</div>
+        <div @click='goToRouterLink("/layout/withdraw")' class="link">提现</div>
+        <div @click='goToRouterLink("/layout/GuessHistory")' class="link">投注历史</div>
+        <div @click='goToRouterLink("/layout/stream")' class="link">财务流水</div>
+        <div @click='goToRouterLink("/layout/AccountSafe")' class="link">账号安全</div>
+        <div @click='goToRouterLink("/layout/SystemMsg")' class="link">系统消息</div>
+        <div @click='goToRouterLink("/layout/home")' class="link">联系客服</div>
       </div>
       <div class="logout" @click="logout">退出登录</div>
     </van-popup>
@@ -93,6 +93,11 @@ export default {
     selectDate(dateList){
       console.log(dateList);
       
+    },
+    // 跳转页面
+    goToRouterLink(link){
+      this.showUserMenu = false;
+      this.$router.push(link)
     }
   }
 };

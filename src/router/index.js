@@ -38,6 +38,14 @@ export default new Router({
         {path:'/layout/BankcardEdit',name:'BankcardEdit',component: () => import('@/views/User/BankcardEdit.vue'),meta: { keepAlive: true ,title:'编辑银行卡',}},
         //用户中心-财务流水
         {path:'/layout/stream',name:'stream',component: () => import('@/views/User/stream.vue'),meta: { keepAlive: true ,title:'财务流水',}},
+        //用户中心-账户安全
+        {path:'/layout/AccountSafe',name:'AccountSafe',component: () => import('@/views/User/AccountSafe.vue'),meta: { keepAlive: true ,title:'账户安全',}},
+        //用户中心-绑定手机
+        {path:'/layout/ChangeMobile',name:'ChangeMobile',component: () => import('@/views/User/ChangeMobile.vue'),meta: { keepAlive: true ,title:'绑定手机',}},
+        //用户中心-修改密码
+        {path:'/layout/ChangePwd',name:'ChangePwd',component: () => import('@/views/User/ChangePwd.vue'),meta: { keepAlive: true ,title:'修改密码',}},
+        //用户中心-修改支付密码
+        {path:'/layout/ChangePayPwd',name:'ChangePayPwd',component: () => import('@/views/User/ChangePayPwd.vue'),meta: { keepAlive: true ,title:'修改支付密码',}},
       ]
     },
     /*******登录********/

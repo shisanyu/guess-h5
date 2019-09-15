@@ -21,14 +21,14 @@
 
 .fade-transform-enter {
   opacity: 0;
-  -webkit-transform: translateX(-100%);
-  transform: translateX(-100%);
+  -webkit-transform: translateX(-20%);
+  transform: translateX(-20%);
 }
 
 .fade-transform-leave-to {
   opacity: 0;
-  -webkit-transform: translateX(100%);
-  transform: translateX(100%);
+  -webkit-transform: translateX(20%);
+  transform: translateX(20%);
 }
 
 /*breadcrumb transition*/
@@ -41,8 +41,8 @@
 .breadcrumb-enter,
 .breadcrumb-leave-active {
   opacity: 0;
-  -webkit-transform: translateX(100%);
-  transform: translateX(100%);
+  -webkit-transform: translateX(20%);
+  transform: translateX(20%);
 }
 
 .breadcrumb-move {
