@@ -8,6 +8,7 @@ import 'vant/lib/index.css';
 import '@/style/common.css';
 import VueBetterCalendar from 'vue-better-calendar'
 import axios from 'axios'
+import qs from 'qs';
 import {Toast} from 'vant'
 
 
@@ -23,6 +24,7 @@ if (process.env.NODE_ENV == 'production') {
 axios.interceptors.request.use(config => {
   // 在发送请求之前做些什么
   config.withCredentials = true;
+  config.headers['Content-Type'] = 'application/json';
   return config;
 }, error => {
   // 对请求错误做些什么
@@ -37,7 +39,7 @@ axios.interceptors.response.use(response=>{
     if(response.code=='0'){
       return response;
     }else{
-      Toast.fail(response.data || '');
+      Toast.fail(response.errorMsg || '');
       return response.data;
     }
   } catch (error) {
@@ -49,6 +51,7 @@ axios.interceptors.response.use(response=>{
 })
 
 Vue.prototype.$http = axios;
+Vue.prototype.qs = qs;
 
 Vue.use(Vant);
 Vue.use(VueBetterCalendar)

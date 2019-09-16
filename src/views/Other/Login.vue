@@ -8,19 +8,19 @@
       <p class="title">注册</p>
       <div class="input-box">
         <img src="../../assets/login-user.png" class="label" alt="">
-        <input type="text" v-model="signIn.userName" placeholder="用户名（4-12位小写字母或数字）" maxlength="12" minlength="4" :change="onInputChange('userName')"/>
+        <input type="text" v-model="signIn.loginAccount" placeholder="用户名（4-12位小写字母或数字）" maxlength="12" minlength="4" :change="onInputChange('loginAccount')"/>
       </div>
       <div class="input-box">
         <img src="../../assets/login-pwd.png" class="label" alt="">
-        <input type="text" v-model="signIn.password" placeholder="密码（6-12位小写字母或数字）" maxlength="12" minlength="6" />
+        <input type="password" v-model="signIn.loginPassword" placeholder="密码（6-12位小写字母或数字）" maxlength="12" minlength="6" />
       </div>
       <div class="input-box">
         <img src="../../assets/login-pwd.png" class="label" alt="">
-        <input type="text" v-model="signIn.rePassword" placeholder="用户名（4-12位小写字母或数字）" maxlength="12" minlength="6" />
+        <input type="password" v-model="signIn.confirmPassword" placeholder="请再次输入密码" maxlength="12" minlength="6" />
       </div>
       <div class="input-box">
         <img src="../../assets/login-invite.png" class="label" alt="">
-        <input type="text" v-model="signIn.code" placeholder="推荐码（非必填）" />
+        <input type="text" v-model="signIn.invitationCode" placeholder="推荐码（非必填）" />
       </div>
       <div class="btn" @click="registerFun">注册</div>
       <p class="back" @click="isRegister=false;">返回登录</p>
@@ -51,16 +51,19 @@ export default {
   data() {
     return {
       signIn: {
-        userName: 'leo12346',
-        password: '123456',
-        rePassword: '123465',
-        code: ''
+        loginAccount: 'leo123456',
+        loginPassword: '123456',
+        confirmPassword: '123456',
+        invitationCode: ''
       },
       login:{
 
       },
       isRegister:true, // 是否注册
     }
+  },
+  created(){
+    
   },
   methods:{
     // 限制输入英文 数字
@@ -69,9 +72,17 @@ export default {
     },
     // 注册
     registerFun(){
-      this.$http.post('account/register').then(res=>{
+      if(!this.signIn.loginAccount || this.signIn.loginAccount.length<4){
+        return this.$toast("请输入正确的用户名");
+      }
+      if(!this.signIn.loginPassword || this.signIn.loginPassword.length<6){
+        return this.$toast("请输入正确的密码");
+      }
+      if(this.signIn.loginPassword != this.signIn.confirmPassword){
+        return this.$toast("密码不一致");
+      }
+      this.$http.post('account/register',this.signIn).then(res=>{
         console.log(res);
-        
       })
     }
   }

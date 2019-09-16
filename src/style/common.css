@@ -39,6 +39,7 @@
 [class*=van-hairline]::after{
 }
 .van-picker__mask{
+  background-image: -webkit-gradient(linear,left top, left bottom,from(rgba(53,51,59,.9)),to(rgba(53,51,59,.7))),-webkit-gradient(linear,left bottom, left top,from(rgba(53,51,59,.9)),to(rgba(53,51,59,.7)));
   background-image: linear-gradient(180deg,rgba(53,51,59,.9),rgba(53,51,59,.7)),linear-gradient(0deg,rgba(53,51,59,.9),rgba(53,51,59,.7));
 }
 /*pickek组件-end*/
@@ -74,6 +75,15 @@
   bottom: 44px;
 }
 .van-tabs__wrap--scrollable .van-tab{
-  flex: 0 0 20% !important;
-  flex-basis: 20%;
+  -webkit-box-flex: 0 !important;
+      -ms-flex: 0 0 20% !important;
+          flex: 0 0 20% !important;
+  -ms-flex-preferred-size: 20%;
+      flex-basis: 20%;
+}
+
+
+/* toast样式 */
+.van-toast__text{
+  font-size: 22px;
 }
