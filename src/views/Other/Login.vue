@@ -22,7 +22,7 @@
         <img src="../../assets/login-invite.png" class="label" alt="">
         <input type="text" v-model="signIn.code" placeholder="推荐码（非必填）" />
       </div>
-      <div class="btn">注册</div>
+      <div class="btn" @click="registerFun">注册</div>
       <p class="back" @click="isRegister=false;">返回登录</p>
     </div>
     <!-- 登录 -->
@@ -51,21 +51,28 @@ export default {
   data() {
     return {
       signIn: {
-        userName: '',
-        password: '',
-        rePassword: '',
+        userName: 'leo12346',
+        password: '123456',
+        rePassword: '123465',
         code: ''
       },
       login:{
 
       },
-      isRegister:false, // 是否注册
+      isRegister:true, // 是否注册
     }
   },
   methods:{
     // 限制输入英文 数字
     onInputChange(key){
       this.signIn[key] = this.signIn[key].replace(/[^\a-\z\A-\Z0-9]/g, '');
+    },
+    // 注册
+    registerFun(){
+      this.$http.post('account/register').then(res=>{
+        console.log(res);
+        
+      })
     }
   }
 }
