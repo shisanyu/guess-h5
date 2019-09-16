@@ -60,7 +60,7 @@ export default {
         loginAccount: '',
         loginPassword: ''
       },
-      isRegister: true, // 是否注册
+      isRegister: false, // 是否注册
     }
   },
   created() {
@@ -83,7 +83,10 @@ export default {
         return this.$toast("密码不一致");
       }
       this.$http.post('account/register', JSON.stringify(this.signIn)).then(res => {
-        console.log(res);
+        if (res.retCode == 0) {
+          this.$toast.success("注册成功！");
+          this.isRegister = false;
+        }
       })
     },
     // 登录
@@ -95,7 +98,11 @@ export default {
         return this.$toast("请输入正确的密码");
       }
       this.$http.post('account/login', this.loginForm).then(res => {
-        console.log(res);
+        if (res.retCode == 0) {
+          this.$store.commit('setUserInfo', res.data);
+          this.$store.commit('setToken', res.data.token);
+          this.$router.replace('/layout/home');
+        }
       })
     }
   }

@@ -16,7 +16,6 @@ if (process.env.NODE_ENV == 'production') {
   // 生产环境
   axios.defaults.baseURL = 'http://121.42.196.103:8282/jingcai/api/';
 } else {
-  // 开发环境
   axios.defaults.baseURL = '/apis/';
 }
 
@@ -24,7 +23,7 @@ if (process.env.NODE_ENV == 'production') {
 axios.interceptors.request.use(config => {
   // 在发送请求之前做些什么
   config.withCredentials = true;
-  config.headers['Content-Type'] = 'application/json';
+  config.headers['Content-Type'] = 'application/json;charset=UTF-8';
   return config;
 }, error => {
   // 对请求错误做些什么
@@ -36,10 +35,10 @@ axios.interceptors.request.use(config => {
 /* 响应处理 */
 axios.interceptors.response.use(response=>{
   try {
-    if(response.code=='0'){
-      return response;
+    if(response.data.retCode=='0'){
+      return response.data;
     }else{
-      Toast.fail(response.errorMsg || '');
+      Toast.fail(response.data.errorMsg || '');
       return response.data;
     }
   } catch (error) {
@@ -56,6 +55,16 @@ Vue.prototype.qs = qs;
 Vue.use(Vant);
 Vue.use(VueBetterCalendar)
 Vue.config.productionTip = false
+
+// 从本地获取token  userInfo 缓存
+try {
+  let token = localStorage.getItem('token');
+  let userInfo = localStorage.getItem('userInfo');
+  if(token) store.commit("setToken",token);
+  if(userInfo) store.commit("setUserInfo",userInfo);
+} catch (error) {
+  
+}
 
 
 new Vue({
