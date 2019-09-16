@@ -8,7 +8,7 @@
       <p class="title">注册</p>
       <div class="input-box">
         <img src="../../assets/login-user.png" class="label" alt="">
-        <input type="text" v-model="signIn.loginAccount" placeholder="用户名（4-12位小写字母或数字）" maxlength="12" minlength="4" :change="onInputChange('loginAccount')"/>
+        <input type="text" v-model="signIn.loginAccount" placeholder="用户名（4-12位小写字母或数字）" maxlength="12" minlength="4" :change="onInputChange('loginAccount')" />
       </div>
       <div class="input-box">
         <img src="../../assets/login-pwd.png" class="label" alt="">
@@ -30,17 +30,17 @@
       <p class="title">登录</p>
       <div class="input-box">
         <img src="../../assets/login-user.png" class="label" alt="">
-        <input type="text" v-model="signIn.userName" placeholder="请输入用户名" maxlength="12" minlength="4" />
+        <input type="text" v-model="loginForm.loginAccount" placeholder="请输入用户名" maxlength="12" minlength="4" />
       </div>
       <div class="input-box">
         <img src="../../assets/login-pwd.png" class="label" alt="">
-        <input type="text" v-model="signIn.password" placeholder="请输入密码" maxlength="12" minlength="6" />
+        <input type="password" v-model="loginForm.loginPassword" placeholder="请输入密码" maxlength="12" minlength="6" />
       </div>
       <div class="other">
         <span @click="isRegister=true;">账号注册</span>
         <span>忘记密码</span>
       </div>
-      <div class="btn">登录</div>
+      <div class="btn" @click="login">登录</div>
       <router-link to="/layout/home" class="back">我先逛逛</router-link>
     </div>
   </div>
@@ -56,32 +56,45 @@ export default {
         confirmPassword: '123456',
         invitationCode: ''
       },
-      login:{
-
+      loginForm: {
+        loginAccount: '',
+        loginPassword: ''
       },
-      isRegister:true, // 是否注册
+      isRegister: true, // 是否注册
     }
   },
-  created(){
-    
+  created() {
+
   },
-  methods:{
+  methods: {
     // 限制输入英文 数字
-    onInputChange(key){
+    onInputChange(key) {
       this.signIn[key] = this.signIn[key].replace(/[^\a-\z\A-\Z0-9]/g, '');
     },
     // 注册
-    registerFun(){
-      if(!this.signIn.loginAccount || this.signIn.loginAccount.length<4){
+    registerFun() {
+      if (!this.signIn.loginAccount || this.signIn.loginAccount.length < 4) {
         return this.$toast("请输入正确的用户名");
       }
-      if(!this.signIn.loginPassword || this.signIn.loginPassword.length<6){
+      if (!this.signIn.loginPassword || this.signIn.loginPassword.length < 6) {
         return this.$toast("请输入正确的密码");
       }
-      if(this.signIn.loginPassword != this.signIn.confirmPassword){
+      if (this.signIn.loginPassword != this.signIn.confirmPassword) {
         return this.$toast("密码不一致");
       }
-      this.$http.post('account/register',this.signIn).then(res=>{
+      this.$http.post('account/register', JSON.stringify(this.signIn)).then(res => {
+        console.log(res);
+      })
+    },
+    // 登录
+    login() {
+      if (!this.loginForm.loginAccount || this.loginForm.loginAccount.length < 4) {
+        return this.$toast("请输入正确的用户名");
+      }
+      if (!this.loginForm.loginPassword || this.loginForm.loginPassword.length < 6) {
+        return this.$toast("请输入正确的密码");
+      }
+      this.$http.post('account/login', this.loginForm).then(res => {
         console.log(res);
       })
     }
