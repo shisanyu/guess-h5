@@ -51,62 +51,98 @@ export default {
   data() {
     return {
       signIn: {
-        loginAccount: 'leo123456',
-        loginPassword: '123456',
-        confirmPassword: '123456',
-        invitationCode: ''
+        loginAccount: "leo123456",
+        loginPassword: "123456",
+        confirmPassword: "123456",
+        invitationCode: ""
       },
       loginForm: {
-        loginAccount: '',
-        loginPassword: ''
+        loginAccount: "",
+        loginPassword: ""
       },
-      isRegister: false, // 是否注册
-    }
+      isRegister: false // 是否注册
+    };
   },
-  created() {
-
-  },
+  created() {},
   methods: {
     // 限制输入英文 数字
     onInputChange(key) {
-      this.signIn[key] = this.signIn[key].replace(/[^\a-\z\A-\Z0-9]/g, '');
+      this.signIn[key] = this.signIn[key].replace(/[^\a-\z\A-\Z0-9]/g, "");
     },
     // 注册
     registerFun() {
       if (!this.signIn.loginAccount || this.signIn.loginAccount.length < 4) {
-        return this.$toast("请输入正确的用户名");
+        
+        this.$toast({
+          duration: 1000,
+          forbidClick: true, // 禁用背景点击
+          message: "请输入正确的用户名"
+        });
+        return 
       }
       if (!this.signIn.loginPassword || this.signIn.loginPassword.length < 6) {
-        return this.$toast("请输入正确的密码");
+        this.$toast({
+          duration: 1000,
+          forbidClick: true, // 禁用背景点击
+          message: "请输入正确的密码"
+        });
+        return 
       }
       if (this.signIn.loginPassword != this.signIn.confirmPassword) {
-        return this.$toast("密码不一致");
+        this.$toast({
+          duration: 1000,
+          forbidClick: true, // 禁用背景点击
+          message: "密码不一致"
+        });
+        return 
       }
-      this.$http.post('account/register', JSON.stringify(this.signIn)).then(res => {
-        if (res.retCode == 0) {
-          this.$toast.success("注册成功！");
-          this.isRegister = false;
-        }
-      })
+      this.$http
+        .post("account/register", JSON.stringify(this.signIn))
+        .then(res => {
+          if (res.retCode == 0) {
+            this.$toast.success({
+              duration: 1000,
+              forbidClick: true, // 禁用背景点击
+              message: "注册成功！"
+            });
+            this.isRegister = false;
+          }
+        });
     },
     // 登录
     login() {
-      if (!this.loginForm.loginAccount || this.loginForm.loginAccount.length < 4) {
-        return this.$toast("请输入正确的用户名");
+      if (
+        !this.loginForm.loginAccount ||
+        this.loginForm.loginAccount.length < 4
+      ) {
+        this.$toast({
+          duration: 1000,
+          forbidClick: true, // 禁用背景点击
+          message: "请输入正确的用户名"
+        });
+        return 
       }
-      if (!this.loginForm.loginPassword || this.loginForm.loginPassword.length < 6) {
-        return this.$toast("请输入正确的密码");
+      if (
+        !this.loginForm.loginPassword ||
+        this.loginForm.loginPassword.length < 6
+      ) {
+        this.$toast({
+          duration: 1000,
+          forbidClick: true, // 禁用背景点击
+          message: "请输入正确的密码"
+        });
+        return 
       }
-      this.$http.post('account/login', this.loginForm).then(res => {
+      this.$http.post("account/login", this.loginForm).then(res => {
         if (res.retCode == 0) {
-          this.$store.commit('setUserInfo', res.data);
-          this.$store.commit('setToken', res.data.token);
-          this.$router.replace('/layout/home');
+          this.$store.commit("setUserInfo", res.data);
+          this.$store.commit("setToken", res.data.token);
+          this.$router.replace("/layout/home");
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

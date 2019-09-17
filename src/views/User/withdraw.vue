@@ -13,7 +13,7 @@
     </router-link>
     <!-- 充值框 -->
     <div class="content-box">
-      <div class="content-body content-t between" >
+      <div class="content-body content-t between">
         <!-- @click="bankcardModel=true" -->
         <div class="content-label">银行卡号：</div>
         <div class="card-num">************345</div>
@@ -76,6 +76,8 @@
     <van-number-keyboard v-model="price" extra-key="." :show="show" safe-area-inset-bottom :maxlength="10" @blur="show = false" />
     <!-- 支付键盘 -->
     <van-number-keyboard :show="showKeyboard" @input="onInput" @delete="onDelete" @blur="showKeyboard = false" />
+    <!-- 无银行卡提示弹框 -->
+
   </div>
 </template>
 
@@ -93,14 +95,45 @@ export default {
       bankcardModel: false, //控制银行卡选择的弹框
       columns: ["杭州", "宁波", "温州", "嘉兴", "湖州"],
       password: "", //支付密码
-      showKeyboard: false //控制支付密码键盘
+      showKeyboard: false, //控制支付密码键盘
+      bankInfo: null //银行卡信息
     };
   },
-  created(){
-    this.$store.commit("setPageTitle","提现");
+  created() {
+    this.$store.commit("setPageTitle", "提现");
   },
-  mounted() {},
+  mounted() {
+    this.getBankInfo();//银行卡信息
+  },
   methods: {
+    //获取银行卡信息
+    getBankInfo() {
+      
+      this.$http.post("orderInfo/recharge", pramas).then(res => {
+        if (res.retCode == 0) {
+          if (!!res.data) {
+            this.bankInfo = res.data;
+          } else {
+            this.$dialog
+              .confirm({
+                title: "标题",
+                message: "您暂未绑定银行卡",
+                beforeClose,
+                cancelButtonText: "暂不提现",
+                confirmButtonText: "立即绑定"
+              })
+              .then(() => {
+                // on confirm
+                console.log('立即绑定')
+              })
+              .catch(() => {
+                // on cancel
+                console.log('暂不提现')
+              });
+          }
+        }
+      });
+    },
     //清空金额
     clearPrice() {
       this.price = "";
@@ -162,7 +195,7 @@ export default {
     },
     //点击确认支付
     submit() {
-      this.showShopCar=false;
+      this.showShopCar = false;
     },
     //点击支付完成按钮
     successBtn() {
@@ -332,7 +365,7 @@ a {
         margin-top: 30px;
       }
     }
-    .model-text:nth-child(2){
+    .model-text:nth-child(2) {
       border-bottom: 1px solid $border-color;
       padding-bottom: 40px;
     }

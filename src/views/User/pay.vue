@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <div class="pay-type between">
-      <div class="img-box zfb-img" @click="changePay(1)" :class="activeTab==1?'active':''">
+      <div class="img-box zfb-img" @click="changePay('alipay')" :class="activeTab=='alipay'?'active':''">
         <img src="../../assets/logo-zfb.png" alt="">
         <i></i>
       </div>
-      <div class="img-box wx-img" @click="changePay(2)" :class="activeTab==2?'active':''">
+      <div class="img-box wx-img" @click="changePay('wechant')" :class="activeTab=='wechant'?'active':''">
         <img src="../../assets/logo-wx.png" alt="">
         <i></i>
       </div>
@@ -42,7 +42,7 @@
       <div class="close-btn" @click="clearModel">×</div>
       <div class="model-text between">
         <div class="model-label">充值方式：</div>
-        <div class="model-label" v-if='activeTab'>支付宝</div>
+        <div class="model-label" v-if='activeTab=="alipay"'>支付宝</div>
         <div class="model-label" v-else>微信</div>
       </div>
       <div class="model-text between">
@@ -59,11 +59,12 @@
     <!-- 数字键盘 -->
     <van-number-keyboard v-model="price" extra-key="." :show="show" safe-area-inset-bottom :maxlength="10" @blur="show = false" />
     <!-- 二维码弹框 -->
-    <van-overlay :show="showCode" @click="clearCodeModel" />
-    <div class="code-box model-box">
+    <van-overlay :show="showCode"  />
+    <div class="code-box model-box" v-if="showCode">
       <div class="close-box" @click="clearCodeModel"></div>
-      <div class="qrcode" ref="qrcodeContainer"></div>
-      <p>请扫秒二维码支付</p>
+      <!-- <div class="qrcode" ref="qrcodeContainer"></div> -->
+      <img class="code-img" :src="codeUrl" alt="">
+      <p>请扫码支付，长按保存二维码</p>
     </div>
   </div>
 </template>
@@ -75,9 +76,9 @@ export default {
   data() {
     return {
       activeGame: "",
-      activeTab: 1, //1为支付宝支付，2为微信支付
+      activeTab: 'alipay', //alipay为支付宝支付，wechant为微信支付
       showShopCar: false, //遮罩层
-      price: "200", //金额
+      price: "", //金额
       priceList: [
         { number: "100", id: 1 },
         { number: "200", id: 2 },
@@ -88,13 +89,14 @@ export default {
       show: false, //控制弹出数字键盘
       isFinish: false, //判断是否完成
       showCode:true,//控制二维码弹框
+      codeUrl:'https://wallimn.iteye.com',//二维码地址
     };
   },
   created() {
     this.$store.commit("setPageTitle", "充值");
   },
   mounted() {
-    this.showQRCode();
+   // this.showQRCode();
   },
   methods: {
     //生成二维码
@@ -128,20 +130,48 @@ export default {
     sureBtn() {
       if (!!this.price) {
         if (parseFloat(this.price) <= 10000) {
-          this.showShopCar = true;
+          
+          if(parseFloat(this.price) >= 100){
+            this.showShopCar = true;
+          }else{
+            this.$toast({
+              duration: 1000,
+              forbidClick: true, // 禁用背景点击
+              message: "输入金额不能小于100"
+            });
+          }
         } else {
-          // this.$toast("输入金额不能大于10000");
           this.$toast({
             duration: 1000,
             forbidClick: true, // 禁用背景点击
             message: "输入金额不能大于10000"
           });
+          
         }
+      }else{
+        this.$toast({
+          duration: 1000,
+          forbidClick: true, // 禁用背景点击
+          message: "请输入充值金额"
+        });
       }
     },
-    //点击确认支付
+    //点击确认充值
     submit() {
-      this.isFinish = true;
+      
+      let params={
+        token:this.$store.state.token,
+        transferType:this.activeTab,//充值方式
+        amount:parseFloat(this.price),//充值金额
+      }
+      this.$http.post("orderInfo/recharge",pramas ).then(res => {
+        if (res.retCode == 0) {
+         this.codeUrl=res.data;
+         this.showShopCar = false;
+         this.isFinish = false;
+         this.showCode = true;
+        } 
+      });
     },
     //点击支付完成按钮
     successBtn() {
@@ -323,6 +353,10 @@ export default {
     min-height: 387px;
     transform: translate(-50%, -60%);
     text-align: center;
+    .code-img{
+      width: 540px;
+      height: 540px;
+    }
     p{
       font-size: 28px;
       padding-top: 30px;
