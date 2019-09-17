@@ -49,7 +49,7 @@
         <div class="model-label">充值金额：</div>
         <div class="model-label model-price">{{price}}</div>
       </div>
-      
+
       <div class="btn-box between" v-if="isFinish">
         <div class="btn sure-big-btn" @click="successBtn">支付完成</div>
         <div class="btn sure-big-btn matter-btn">支付遇到问题</div>
@@ -58,18 +58,25 @@
     </div>
     <!-- 数字键盘 -->
     <van-number-keyboard v-model="price" extra-key="." :show="show" safe-area-inset-bottom :maxlength="10" @blur="show = false" />
-
+    <!-- 二维码弹框 -->
+    <van-overlay :show="showCode" @click="clearCodeModel" />
+    <div class="code-box model-box">
+      <div class="close-box" @click="clearCodeModel"></div>
+      <div class="qrcode" ref="qrcodeContainer"></div>
+      <p>请扫秒二维码支付</p>
+    </div>
   </div>
 </template>
 
 <script>
+import QRCode from 'qrcodejs2';//二维码生成插件
 export default {
   name: "pay",
   data() {
     return {
       activeGame: "",
       activeTab: 1, //1为支付宝支付，2为微信支付
-      showShopCar: true, //遮罩层
+      showShopCar: false, //遮罩层
       price: "200", //金额
       priceList: [
         { number: "100", id: 1 },
@@ -79,14 +86,29 @@ export default {
         { number: "2000", id: 5 }
       ], //金额筛选的项
       show: false, //控制弹出数字键盘
-      isFinish:false,//判断是否完成
+      isFinish: false, //判断是否完成
+      showCode:true,//控制二维码弹框
     };
   },
-  created(){
-    this.$store.commit("setPageTitle","充值");
+  created() {
+    this.$store.commit("setPageTitle", "充值");
   },
-  mounted() {},
+  mounted() {
+    this.showQRCode();
+  },
   methods: {
+    //生成二维码
+    // vue对象的一个method
+    showQRCode() {
+      var qrcode = new QRCode(this.$refs.qrcodeContainer, {
+        text: "https://wallimn.iteye.com",
+        width: 260,
+        height: 260,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    },
     //选择支付方式
     changePay(num) {
       if (this.activeTab != num) {
@@ -98,15 +120,15 @@ export default {
       this.price = item.number;
     },
     //关闭充值弹框
-    clearModel(){
-      this.showShopCar=false;
-      this.isFinish=false;
+    clearModel() {
+      this.showShopCar = false;
+      this.isFinish = false;
     },
     //点击充值按钮
     sureBtn() {
       if (!!this.price) {
         if (parseFloat(this.price) <= 10000) {
-          this.showShopCar=true;
+          this.showShopCar = true;
         } else {
           // this.$toast("输入金额不能大于10000");
           this.$toast({
@@ -118,13 +140,17 @@ export default {
       }
     },
     //点击确认支付
-    submit(){
-      this.isFinish=true;
+    submit() {
+      this.isFinish = true;
     },
     //点击支付完成按钮
-    successBtn(){
-      this.$router.replace({path:'/layout/home'})
+    successBtn() {
+      this.$router.replace({ path: "/layout/home" });
     },
+    //关闭二维码弹框
+    clearCodeModel(){
+      this.showCode=false;
+    }
   }
 };
 </script>
@@ -225,7 +251,6 @@ export default {
     height: 100vh;
     background: $opacity-dark;
     padding: 0 40px;
-    
   }
   .model-box {
     position: fixed;
@@ -244,7 +269,7 @@ export default {
       text-align: center;
       margin-bottom: 40px;
     }
-    p{
+    p {
       color: $gray;
       font-size: 24px;
       text-align: center;
@@ -252,42 +277,40 @@ export default {
     }
     .close-btn {
       position: absolute;
-      top:26px;
+      top: 26px;
       right: 34px;
-      display: block; 
+      display: block;
       color: #ffc444;
       font-size: 50px;
       font-weight: 300;
     }
-    .model-text{
-
+    .model-text {
       margin-bottom: 45px;
-      .model-label{
+      .model-label {
         font-size: 24px;
         color: $gray;
       }
-      .model-price{
+      .model-price {
         color: #ffc444;
       }
     }
-    .sure-big-btn{
+    .sure-big-btn {
       margin-top: 60px;
     }
-    .btn-box{
-      .btn{
+    .btn-box {
+      .btn {
         border: solid 2px #ffc444;
         width: 49%;
         line-height: 76px;
         margin-top: 15px;
       }
-      .sure-btn{
-
+      .sure-btn {
       }
-      .matter-btn{
+      .matter-btn {
         background-color: transparent;
         color: $gray;
       }
-    } 
+    }
   }
   .prompt {
     color: $gray;
@@ -295,11 +318,32 @@ export default {
     margin-top: 28px;
     line-height: 32px;
   }
+  .code-box {
+    width: auto;
+    min-height: 387px;
+    transform: translate(-50%, -60%);
+    text-align: center;
+    p{
+      font-size: 28px;
+      padding-top: 30px;
+      margin-bottom: 0;
+    }
+    .close-box{
+      position: absolute;
+      left: 50%;
+      bottom: -120px;
+      transform: translateX(-50%);
+      width:70px;
+      height: 70px;
+      background: url('../../assets/icon-close2.png') no-repeat;
+      background-size: 100%;
+    }
+  }
 }
 </style>
 
 <style lang="css" scoped>
-.container >>> .van-overlay{
+.container >>> .van-overlay {
   z-index: 10;
 }
 </style>

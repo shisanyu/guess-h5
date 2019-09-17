@@ -33,15 +33,15 @@
     <van-popup class="user-menu" v-model="showUserMenu" position="right" :style="{ width: '50%',height: '100%'}">
       <div class="header">
         <img src="../assets/ig.png" alt />
-        <p class="name">Mr.HAP</p>
+        <p class="name">{{$store.state.userInfo.accountLogin}}</p>
         <div class="header-main">
           <div class="item">
             <label>余额</label>
-            <p>0.0</p>
+            <p>{{$store.state.userInfo.userBalance}}</p>
           </div>
           <div class="item">
             <label>可提</label>
-            <p>0.0</p>
+            <p>{{$store.state.userInfo.userBalance}}</p>
           </div>
           <div class="item">
             <label>奖金</label>
