@@ -9,7 +9,7 @@
     <div class="list-box">
       <div class="label-text">银行卡号</div>
       <div class="label-content">
-        <input type="number" v-model="bankNo" placeholder="请输入银行卡号">
+        <input type="number" v-model="bankNo" placeholder="请输入银行卡号" >
       </div>
     </div>
     <div class="list-box" @click="changeProvince">
@@ -113,6 +113,10 @@ export default {
     
   },
   methods: {
+    // 限制输入英文 数字
+    onInputChange(key) {
+      // this.key = this.key.replace(/[^\a-\z\A-\Z0-9]/g, "");
+    },
     //获取省数据
     getProvince(){
       this.getArea(1,1);
@@ -147,6 +151,7 @@ export default {
     },
     //点击确认编辑，绑定
     edit() {
+        
       let params={
         token:this.$store.state.token,
         bankUserName:this.bankUserName,//开户名称
