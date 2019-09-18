@@ -164,7 +164,7 @@ export default {
         transferType:this.activeTab,//充值方式
         amount:parseFloat(this.price),//充值金额
       }
-      this.$http.post("orderInfo/recharge",pramas ).then(res => {
+      this.$http.post("orderInfo/recharge",params ).then(res => {
         if (res.retCode == 0) {
          this.codeUrl=res.data;
          this.showShopCar = false;

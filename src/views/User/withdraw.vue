@@ -16,7 +16,7 @@
       <div class="content-body content-t between">
         <!-- @click="bankcardModel=true" -->
         <div class="content-label">银行卡号：</div>
-        <div class="card-num">************345</div>
+        <div class="card-num">{{"434586597078098"|getBankStr}}</div>
         <!-- <div class="img-box">
           <img src="../../assets/icon-down.png" alt="">
         </div> -->
@@ -51,7 +51,7 @@
       <div class="close-btn" @click="clearModel">×</div> -->
       <div class="model-text between">
         <div class="model-label">提现卡号：</div>
-        <div class="model-label">************345"</div>
+        <div class="model-label">{{"434586597078098"|getBankStr}}</div>
       </div>
       <div class="model-text between">
         <div class="model-label">提现金额：</div>
@@ -108,8 +108,10 @@ export default {
   methods: {
     //获取银行卡信息
     getBankInfo() {
-      
-      this.$http.post("orderInfo/recharge", pramas).then(res => {
+      var params={
+        token:this.$store.state.token
+      }
+      this.$http.post("userBank/info", params).then(res => {
         if (res.retCode == 0) {
           if (!!res.data) {
             this.bankInfo = res.data;
@@ -118,17 +120,21 @@ export default {
               .confirm({
                 title: "标题",
                 message: "您暂未绑定银行卡",
-                beforeClose,
                 cancelButtonText: "暂不提现",
-                confirmButtonText: "立即绑定"
+                confirmButtonText: "立即绑定",
+                showConfirmButton:true,
+                showCancelButton:true,
+                confirmButtonColor:'#35333b'
               })
               .then(() => {
                 // on confirm
                 console.log('立即绑定')
+                this.$router.push({path:'/layout/BankcardEdit'})
               })
               .catch(() => {
                 // on cancel
                 console.log('暂不提现')
+                 this.$router.go(-1);//返回上一层
               });
           }
         }

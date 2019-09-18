@@ -87,3 +87,7 @@
 .van-toast__text{
   font-size: 22px;
 }
+/*vant 弹框样式*/
+.van-button__text{
+  font-size: 32px;
+}
