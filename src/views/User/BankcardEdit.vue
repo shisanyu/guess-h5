@@ -115,7 +115,7 @@ export default {
   methods: {
     // 限制输入英文 数字
     onInputChange(key) {
-      // this.key = this.key.replace(/[^\a-\z\A-\Z0-9]/g, "");
+      this.key = this.key.replace(/[^0-9]+/g, "");
     },
     //获取省数据
     getProvince(){
@@ -135,13 +135,6 @@ export default {
         if (res.retCode == 0) {
           if(type==1){//省数据
             this.provinceList=res.data
-            
-            // res.data.map((val)=>{
-            //   var obj={};
-            //   obj.parentId=val.parentId;
-            //   obj.text=val.name;
-            //   this.columns.push(obj)
-            // })
           }else if(type==2){//市数据
             this.cityList=res.data
             console.log(this.cityList,res.data)
