@@ -61,7 +61,7 @@ try {
   let token = localStorage.getItem('token');
   let userInfo = localStorage.getItem('userInfo');
   if(token) store.commit("setToken",token);
-  if(userInfo) store.commit("setUserInfo",userInfo);
+  if(userInfo) store.commit("setUserInfo",JSON.parse(userInfo));
 } catch (error) {
   
 }
