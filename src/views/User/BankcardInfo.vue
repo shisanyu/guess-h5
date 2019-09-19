@@ -2,27 +2,27 @@
   <div class="container">
       <div class="list-box">
         <div class="label-text">开户名称</div>
-        <div class="label-content">王晓明</div>
+        <div class="label-content">{{bankInfo.bankUserName}}</div>
       </div>
       <div class="list-box">
         <div class="label-text">银行卡号</div>
-        <div class="label-content">123123123123123213</div>
+        <div class="label-content">{{bankInfo.bankNo}}</div>
       </div>
       <div class="list-box">
         <div class="label-text">开户省份</div>
-        <div class="label-content">浙江</div>
+        <div class="label-content">{{bankInfo.bankProvince}}</div>
       </div>
       <div class="list-box">
         <div class="label-text">开户城市</div>
-        <div class="label-content">温州</div>
+        <div class="label-content">{{bankInfo.bankCity}}</div>
       </div>
       <div class="list-box">
         <div class="label-text">开户银行</div>
-        <div class="label-content">工商银行</div>
+        <div class="label-content">{{bankInfo.bankName}}</div>
       </div>
       <div class="list-box">
         <div class="label-text">开户支行</div>
-        <div class="label-content">撒大声地支行</div>
+        <div class="label-content">{{bankInfo.bankBranch}}</div>
       </div>
       <div class="sure-big-btn" @click="edit">编辑</div>
   </div>
@@ -33,17 +33,32 @@ export default {
   name: "BankcardInfo",
   data() {
     return {
-
+      bankInfo:null,//银行卡详情
     };
   },
   created(){
     this.$store.commit("setPageTitle","银行卡");
   },
-  mounted() {},
+  mounted() {
+    this.getBankInfo();
+  },
   methods: {
     //跳转编辑页面
     edit(){
       this.$router.push({path:'/layout/BankcardEdit',query:{id:'2'}})
+    },
+    //获取银行卡信息
+    getBankInfo() {
+      var params={
+        token:this.$store.state.token
+      }
+      this.$http.post("userBank/info", params).then(res => {
+        if (res.retCode == 0) {
+          if (!!res.data) {
+            this.bankInfo = res.data;
+          } 
+        }
+      });
     },
   }
 };

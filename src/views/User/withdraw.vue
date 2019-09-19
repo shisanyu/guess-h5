@@ -11,12 +11,12 @@
         </div>
       </div>
     </router-link>
-    <!-- 充值框 -->
+    <!-- 提现框 -->
     <div class="content-box">
       <div class="content-body content-t between">
         <!-- @click="bankcardModel=true" -->
         <div class="content-label">银行卡号：</div>
-        <div class="card-num">{{"434586597078098"|getBankStr}}</div>
+        <div class="card-num" v-if="bankInfo">{{bankInfo.bankNo|getBankStr}}</div>
         <!-- <div class="img-box">
           <img src="../../assets/icon-down.png" alt="">
         </div> -->
@@ -24,14 +24,14 @@
       <div class="content-body content-c">
         <p class="content-label">提现金额</p>
         <div class="content-c-input between">
-          <van-field readonly clickable class="input-box" :value="price" placeholder="请输入充值金额" @touchstart.native.stop="show = true" />
+          <van-field readonly clickable class="input-box" :value="price" placeholder="请输入提现金额" @touchstart.native.stop="show = true" />
           <div class="img-box" @click="clearPrice">
             <img src="../../assets/icon-close2.png" alt="">
           </div>
         </div>
       </div>
       <div class="content-body content-b between">
-        <p class="content-label">当前可提现金额 {{allPrice}}</p>
+        <p class="content-label">当前可提现金额 {{userInfo.userBalance}}</p>
         <div class=""></div>
         <div class="btn" @click="allWithdraw">全部提现</div>
       </div>
@@ -41,9 +41,8 @@
       <p>1.最低金额50，最高金额100000</p>
       <p>2.正常状态下提现30分钟内到账</p>
     </div>
-    <!-- 充值按钮 -->
+    <!-- 提现按钮 -->
     <div class="sure-big-btn" @click="sureBtn">提现</div>
-    <div class="prompt">提示：近期充值渠道不太稳定，若遇到充值不成功，请多尝试几次或联系客服，给您带来不便，敬请见谅。</div>
     <!-- 支付确认弹框 -->
     <van-overlay :show="showShopCar" @click="clearModel" />
     <div class="model-box" v-if="showShopCar">
@@ -51,20 +50,20 @@
       <div class="close-btn" @click="clearModel">×</div> -->
       <div class="model-text between">
         <div class="model-label">提现卡号：</div>
-        <div class="model-label">{{"434586597078098"|getBankStr}}</div>
+        <div class="model-label" v-if="bankInfo">{{bankInfo.bankNo|getBankStr}}</div>
       </div>
       <div class="model-text between">
         <div class="model-label">提现金额：</div>
-        <div class="model-label model-price">{{price}}</div>
+        <div class="model-label model-price">{{parseFloat(price)}}</div>
       </div>
       <div class="model-text">
         <div class="model-label">支付密码：</div>
         <div class="password-box">
           <!-- 密码输入框 -->
-          <van-password-input :value="password" :length="6" :gutter="10" :focused="showKeyboard" @focus="showKeyboard = true" />
+          <van-password-input :value="password" :length="6" :gutter="10" :mask="false" :focused="showKeyboard" @focus="showKeyboard = true" />
         </div>
       </div>
-      <div class="sure-big-btn" @click="submit">确认提现</div>
+      <!-- <div class="sure-big-btn" @click="submit">确认提现</div> -->
     </div>
     <!-- 提现到银行卡选择弹框 -->
     <van-popup class="bankcard-model" v-model="bankcardModel" position="bottom" :style="{ height: '264px',backgroundColor: '#35333b', }">
@@ -96,7 +95,8 @@ export default {
       columns: ["杭州", "宁波", "温州", "嘉兴", "湖州"],
       password: "", //支付密码
       showKeyboard: false, //控制支付密码键盘
-      bankInfo: null //银行卡信息
+      bankInfo: null, //银行卡信息
+      userInfo:this.$store.state.userInfo,//用户信息
     };
   },
   created() {
@@ -104,6 +104,14 @@ export default {
   },
   mounted() {
     this.getBankInfo(); //银行卡信息
+  },
+  watch:{
+    password(nVal,oVal){
+      if(nVal.length>=6){
+        console.log(nVal)
+        this.submit();
+      }
+    },
   },
   methods: {
     //获取银行卡信息
@@ -173,7 +181,10 @@ export default {
     },
     //点击全部提现
     allWithdraw() {
-      this.price = this.allPrice;
+      // if(this.userInfo.userBalance>0){
+        
+      // }
+      this.price = this.userInfo.userBalance+'';
     },
     //选择支付方式
     changePay(num) {
@@ -192,7 +203,7 @@ export default {
       this.bankcardModel = false;
       this.$toast(`当前值：${value}, 当前索引：${index}`);
     },
-    //关闭充值弹框
+    //关闭提现弹框
     clearModel() {
       this.showShopCar = false;
     },
@@ -204,12 +215,21 @@ export default {
     onDelete() {
       this.password = this.password.slice(0, this.password.length - 1);
     },
-    //点击充值按钮
+    //点击提现按钮
     sureBtn() {
       if (!!this.price) {
-        if (parseFloat(this.price) <= 10000) {
+        if (parseFloat(this.price) <= 100000) {
           if (parseFloat(this.price) >= 50) {
-            this.showShopCar = true;
+            if(parseFloat(this.userInfo.userBalance)<=parseFloat(this.price)){
+              this.showShopCar = true;
+            }else{
+              this.$toast({
+                duration: 1000,
+                forbidClick: true, // 禁用背景点击
+                message: "提现金额不能大于可用余额"
+              });
+            }
+            
           } else {
             this.$toast({
               duration: 1000,
@@ -221,14 +241,31 @@ export default {
           this.$toast({
             duration: 1000,
             forbidClick: true, // 禁用背景点击
-            message: "输入金额不能大于10000"
+            message: "输入金额不能大于100000"
           });
         }
       }
     },
     //点击确认支付
     submit() {
-      this.showShopCar = false;
+      
+      let params = {
+        token: this.$store.state.token,
+        payPassword: this.password, //支付密码
+        amount: parseFloat(this.price), //提现额度
+      };
+      this.$http.post("userBank/saveOrUpdate", params).then(res => {
+        if (res.retCode == 0) {
+          this.$toast.success({
+            duration: 1000,
+            forbidClick: true, // 禁用背景点击
+            message: "操作成功！"
+          });
+          this.showShopCar = false;
+          this.showKeyboard=false;
+          this.$router.go(-1);//返回上一层
+        }
+      });
     },
     //点击支付完成按钮
     successBtn() {
