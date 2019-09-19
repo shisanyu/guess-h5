@@ -1,9 +1,10 @@
 <template>
   <div class="container">
     <div class="list-box">
-      <div class="label-text" >绑定手机：</div>
+      <div class="label-text" v-if="$store.state.userInfo&&$store.state.userInfo.mobileNo">修改手机：</div>
+      <div class="label-text" v-else>绑定手机：</div>
       <div class="label-content">
-        <input type="number" v-model="mobileNo" placeholder="请输入手机号" />
+        <input type="number" v-model="mobileNo"  placeholder="请输入手机号" />
       </div>
     </div>
     <!-- <div class="list-box">
@@ -19,26 +20,56 @@
 </template>
 
 <script>
+import { regPhone } from "@/utils/utils.js";
 export default {
-  name: "BankcardInfo",
+  name: "ChangeMobile",
   data() {
     return {
       mobileNo: "", //手机号
-      bankCard: "", //银行卡号
       codeText: "发送验证码",
       disabled: false, //判断验证码按钮是否能点击
       userInfo:null,//用户信息
     };
   },
   created() {
-    this.$store.commit("setPageTitle", "绑定手机");
+    if(this.$store.state.userInfo&&this.$store.state.userInfo.mobileNo){
+      this.$store.commit("setPageTitle", "修改手机");
+    }else{
+      this.$store.commit("setPageTitle", "绑定手机");
+    }
+    
     this.userInfo=this.$store.state.userInfo||null;
     console.log(this.userInfo)
   },
   mounted() {},
   methods: {
     //点击确认
-    submit() {},
+    submit() {
+      if (!regPhone(this.mobileNo)) {
+        return this.$toast({
+          duration: 1000,
+          forbidClick: true, // 禁用背景点击
+          message: "请输入正确的手机号码"
+        });
+      }
+      let params={
+        token:this.$store.state.token,
+        mobileNo:this.mobileNo
+      }
+      this.$http.post("userInfo/bindMobileNo", params).then(res => {
+        if (res.retCode == 0) {
+          this.$toast.success({
+            duration: 1000,
+            forbidClick: true, // 禁用背景点击
+            message: "操作成功！"
+          });
+          let userInfo = this.$store.state.userInfo;
+          userInfo.mobileNo = this.mobileNo;
+          this.$store.commit("setUserInfo",userInfo)
+          this.$router.go(-1);//返回上一层
+        }
+      });
+    },
     // 发送验证码
     sendCode() {
       this.$http.post("userBank/info", params).then(res => {

@@ -135,8 +135,16 @@ export default {
       }
       this.$http.post("account/login", this.loginForm).then(res => {
         if (res.retCode == 0) {
-          this.$store.commit("setUserInfo", res.data);
           this.$store.commit("setToken", res.data.token);
+          this.getUserInfo(res.data.token)
+        }
+      });
+    },
+    //获取用户信息
+    getUserInfo(token){
+      this.$http.post("userInfo/userInfo", {token:token}).then(res => {
+        if (res.retCode == 0) {
+          this.$store.commit("setUserInfo", res.data);
           this.$router.replace("/layout/home");
         }
       });

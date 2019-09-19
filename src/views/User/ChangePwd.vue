@@ -3,19 +3,19 @@
     <div class="list-box">
       <div class="label-text">旧密码：</div>
       <div class="label-content">
-        <input type="number" v-model="userName" placeholder="请输入手机号" />
+        <input type="number" v-model="oldPwd" placeholder="请输入旧密码" />
       </div>
     </div>
     <div class="list-box">
       <div class="label-text">新密码：</div>
       <div class="label-content">
-        <input type="number" v-model="userName" placeholder="6-12位字母或数字" />
+        <input type="number" v-model="newPwd" placeholder="6-12位字母或数字" />
       </div>
     </div>
     <div class="list-box">
       <div class="label-text">新密码：</div>
       <div class="label-content">
-        <input type="number" v-model="userName" placeholder="请再一次输入您的新密码" />
+        <input type="number" v-model="confirmPwd" placeholder="请再一次输入您的新密码" />
       </div>
     </div>
 
@@ -28,8 +28,9 @@ export default {
   name: "BankcardInfo",
   data() {
     return {
-      userName: "", //开户名称
-      bankCard: "" //银行卡号
+      oldPwd: "", //旧密码
+      newPwd: "" ,//新密码
+      confirmPwd:'',//确认密码
     };
   },
   created() {

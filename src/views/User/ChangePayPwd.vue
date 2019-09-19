@@ -1,24 +1,24 @@
 <template>
   <div class="container">
-    <div class="list-box">
+    <!-- <div class="list-box">
       <div class="label-text">旧密码：</div>
       <div class="label-content pwd-box">
-        <!-- 密码输入框 -->
         <van-password-input :value="password" :length="6" :gutter="10" :focused="showKeyboard" @focus="showKeyboard = true" />
       </div>
-    </div>
+    </div> -->
     <div class="list-box">
-      <div class="label-text">新密码：</div>
+      <div class="label-text">支付密码：</div>
       <div class="label-content pwd-box">
         <!-- 密码输入框 -->
-        <van-password-input :value="password" :length="6" :gutter="10" :focused="showKeyboard" @focus="showKeyboard = true" />
+        <van-password-input :value="formData.password" :length="6" :gutter="4" :focused="activeInput=='password'&&showKeyboard" @focus="activeInput='password';showKeyboard = true" />
+        <!-- <input type="number" v-model="mobileNo"  placeholder="请输入手机号" /> -->
       </div>
     </div>
     <div class="list-box">
       <div class="label-text">确认密码：</div>
       <div class="label-content pwd-box">
         <!-- 密码输入框 -->
-        <van-password-input :value="password" :length="6" :gutter="10" :focused="showKeyboard" @focus="showKeyboard = true" />
+        <van-password-input :value="formData.confirmPassword" :length="6" :gutter="4" :focused="activeInput=='confirmPassword'&&showKeyboard" @focus="activeInput='confirmPassword';showKeyboard = true" />
       </div>
     </div>
 
@@ -33,26 +33,74 @@ export default {
   name: "BankcardInfo",
   data() {
     return {
-      userName: "", //开户名称
-      bankCard: "", //银行卡号
-      password: '',
-      showKeyboard: false //控制支付密码键盘
+      confirmPassword: "", //确认密码
+      password: '',//支付密码
+      showKeyboard: false, //控制支付密码键盘
+      formData:{
+        confirmPassword:'',
+        password:''
+      },
+      activeInput:''
     };
   },
   created() {
-    this.$store.commit("setPageTitle", "修改支付密码");
+    this.$store.commit("setPageTitle", "支付密码");
   },
   mounted() {},
   methods: {
     //点击确认
-    submit() {},
+    submit() {
+      if(!this.formData.password|| this.formData.password.length !=6){
+        return this.$toast({
+          duration: 1000,
+          forbidClick: true, // 禁用背景点击
+          message: "请输入正确的支付密码"
+        });
+      }
+      if(!this.formData.confirmPassword|| this.formData.confirmPassword.length !=6){
+        return this.$toast({
+          duration: 1000,
+          forbidClick: true, // 禁用背景点击
+          message: "请输入正确的确认支付密码"
+        });
+      }
+      if(this.formData.password!=this.formData.confirmPassword){
+        return this.$toast({
+          duration: 1000,
+          forbidClick: true, // 禁用背景点击
+          message: "两次密码不一致"
+        });
+      }
+      let params={
+        token:this.$store.state.token,
+        payPassword:this.formData.password
+      }
+      this.$http.post("userInfo/setPassword", params).then(res => {
+        if (res.retCode == 0) {
+          this.$toast.success({
+            duration: 1000,
+            forbidClick: true, // 禁用背景点击
+            message: "操作成功！"
+          });
+          let userInfo = this.$store.state.userInfo;
+          userInfo.payPassword = 'y';
+          this.$store.commit("setUserInfo",userInfo)
+          this.$router.go(-1);//返回上一层
+        }
+      });
+    },
     //点击输入支付密码
     onInput(key) {
-      this.password = (this.password + key).slice(0, 6);
+      this.formData[this.activeInput] = (this.formData[this.activeInput] + key).slice(0, 6);
+      if(this.formData[this.activeInput].length>=6){
+        this.showKeyboard =false;
+      }
+       console.log(this.formData[this.activeInput])
     },
     //点击删除支付密码
     onDelete() {
-      this.password = this.password.slice(0, this.password.length - 1);
+      this.formData[this.activeInput]= this.formData[this.activeInput].slice(0, this.formData[this.activeInput].length - 1);
+      console.log(this.formData[this.activeInput])
     }
   }
 };
@@ -113,5 +161,6 @@ a {
 <style lang="css" scoped>
 .van-password-input >>> .van-password-input__security li {
   height: 70px;
+  width: 70px;
 }
 </style>

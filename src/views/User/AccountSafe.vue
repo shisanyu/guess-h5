@@ -3,7 +3,7 @@
     <div class="list-box">
       <div class="label-text">绑定手机</div>
       <router-link to="/layout/ChangeMobile" class="label-content">
-        <span>18257341234</span>
+        <span v-if="$store.state.userInfo&&$store.state.userInfo.mobileNo">{{$store.state.userInfo.mobileNo}}</span>
         <img src="../../assets/icon-l.png" class="icon-r" alt />
       </router-link>
     </div>
@@ -24,20 +24,19 @@
 
 <script>
 export default {
-  name: "BankcardInfo",
+  name: "AccountSafe",
   data() {
     return {
-      userName: "", //开户名称
-      bankCard: "" //银行卡号
     };
   },
   created() {
     this.$store.commit("setPageTitle", "账户安全");
   },
-  mounted() {},
+  mounted() {
+
+  },
   methods: {
-    //点击确认编辑
-    edit() {}
+    
   }
 };
 </script>

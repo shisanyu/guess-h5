@@ -150,7 +150,6 @@ export default {
           message: "请输入正确的开户名称"
         });
       }
-      console.log(!regNum(this.bankNo))
       if (!regNum(this.bankNo)) {
         return this.$toast({
           duration: 1000,
