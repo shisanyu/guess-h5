@@ -10,7 +10,7 @@
       <div class="label-text">验证码：</div>
       <div class="label-content label-content-code">
         <input type="text" v-model="bankCard" placeholder="请输入验证码" />
-        <span class="send-code" @click="sendCode">发送验证码</span>
+        <span class="send-code" @click="sendCode">{{codeText}}</span>
       </div>
     </div>
 
@@ -24,7 +24,9 @@ export default {
   data() {
     return {
       userName: "", //开户名称
-      bankCard: "" //银行卡号
+      bankCard: "", //银行卡号
+      codeText: "发送验证码",
+      disabled: false //判断验证码按钮是否能点击
     };
   },
   created() {
@@ -35,7 +37,26 @@ export default {
     //点击确认
     submit() {},
     // 发送验证码
-    sendCode() {}
+    sendCode() {
+      this.$http.post("userBank/info", params).then(res => {
+        if (res.retCode == 0) {
+          this.disabled = true;
+          let currentTime = 60;
+          // 设置发送验证码按钮样式
+          let interval = null;
+          let _this = this;
+          interval = setInterval(function() {
+            currentTime--;
+            _this.codeText = currentTime + "s后重送";
+            if (currentTime <= 0) {
+              clearInterval(interval);
+              _this.codeText = "获取验证码";
+              _this.disabled = false;
+            }
+          }, 1000);
+        }
+      });
+    }
   }
 };
 </script>
@@ -83,13 +104,13 @@ a {
       &.label-content-code {
         display: flex;
         align-items: center;
-        input{
-          flex:1;
+        input {
+          flex: 1;
         }
         .send-code {
           font-size: 24px;
           border-radius: 10px;
-          border:1px solid $yellow;
+          border: 1px solid $yellow;
           color: $yellow;
           height: 60px;
           line-height: 56px;
