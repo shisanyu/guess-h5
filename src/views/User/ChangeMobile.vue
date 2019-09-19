@@ -1,18 +1,18 @@
 <template>
   <div class="container">
     <div class="list-box">
-      <div class="label-text">修改手机：</div>
+      <div class="label-text" >绑定手机：</div>
       <div class="label-content">
-        <input type="number" v-model="userName" placeholder="请输入手机号" />
+        <input type="number" v-model="mobileNo" placeholder="请输入手机号" />
       </div>
     </div>
-    <div class="list-box">
+    <!-- <div class="list-box">
       <div class="label-text">验证码：</div>
       <div class="label-content label-content-code">
         <input type="text" v-model="bankCard" placeholder="请输入验证码" />
         <span class="send-code" @click="sendCode">{{codeText}}</span>
       </div>
-    </div>
+    </div> -->
 
     <div class="sure-big-btn" @click="submit">确认绑定</div>
   </div>
@@ -23,14 +23,17 @@ export default {
   name: "BankcardInfo",
   data() {
     return {
-      userName: "", //开户名称
+      mobileNo: "", //手机号
       bankCard: "", //银行卡号
       codeText: "发送验证码",
-      disabled: false //判断验证码按钮是否能点击
+      disabled: false, //判断验证码按钮是否能点击
+      userInfo:null,//用户信息
     };
   },
   created() {
     this.$store.commit("setPageTitle", "绑定手机");
+    this.userInfo=this.$store.state.userInfo||null;
+    console.log(this.userInfo)
   },
   mounted() {},
   methods: {
