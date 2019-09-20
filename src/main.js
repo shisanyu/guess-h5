@@ -14,7 +14,7 @@ import {Toast} from 'vant'
 
 if (process.env.NODE_ENV == 'production') {
   // 生产环境
-  axios.defaults.baseURL = 'http://121.42.196.103:8282/jingcai/api/';
+  axios.defaults.baseURL = window.g.baseURL;
 } else {
   axios.defaults.baseURL = '/apis/';
 }

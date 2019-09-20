@@ -25,12 +25,12 @@
           <li @click="changeType('all')">早盘</li>
           <li @click="changeType('all')">滚盘</li>
         </ul>
-        <div class="result-btn">赛果</div>
+        <router-link to="/layout/GuessRes" class="result-btn">赛果</router-link>
       </div>
     </div>
 
     <ul class="guess-list">
-      <li v-for="item in 1">
+      <li v-for="item in 1" @click="guessInfo(item)">
         <div class="list-tit">
           <img src="../../assets/game.png" alt class="tit-logo" />
           <span>LOL-TCL LPL/BO1</span>
@@ -46,7 +46,7 @@
                 <img src="../../assets/ig.png" alt />
                 <span>IG</span>
               </div>
-              <span class="num" @click="addShopCar(item)">1.33</span>
+              <span class="num" @click.stop="addShopCar(item)">1.33</span>
             </div>
           </div>
         </div>
@@ -72,8 +72,8 @@ export default {
     };
   },
   components: { GuessCar },
-  created(){
-    this.$store.commit("setPageTitle","首页")
+  created() {
+    this.$store.commit("setPageTitle", "首页")
   },
   mounted() {
     this.baseHeight = document.getElementById("navigation").offsetHeight;
@@ -85,10 +85,14 @@ export default {
       this.isFixed = e.target.scrollTop >= this.fixedHeight;
     },
     // 改变早盘、滚盘
-    changeType(type) {},
+    changeType(type) { },
     // 添加购物车
     addShopCar(item) {
       this.showPopup = true;
+    },
+    // 跳转到竞猜详情
+    guessInfo(item) {
+      this.$router.push('/layout/GuessDetail');
     }
   }
 };
