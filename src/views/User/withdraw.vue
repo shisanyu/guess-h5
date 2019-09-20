@@ -60,7 +60,7 @@
         <div class="model-label">支付密码：</div>
         <div class="password-box">
           <!-- 密码输入框 -->
-          <van-password-input :value="password" :length="6" :gutter="10" :mask="false" :focused="showKeyboard" @focus="showKeyboard = true" />
+          <van-password-input :value="password" :length="6" :gutter="10"  :focused="showKeyboard" @focus="showKeyboard = true" />
         </div>
       </div>
       <!-- <div class="sure-big-btn" @click="submit">确认提现</div> -->
@@ -81,6 +81,7 @@
 </template>
 
 <script>
+import {uploadUserInfo} from '@/utils/utils.js';
 export default {
   name: "withdraw",
   data() {
@@ -101,6 +102,7 @@ export default {
   },
   created() {
     this.$store.commit("setPageTitle", "提现");
+   
   },
   mounted() {
     this.getBankInfo(); //银行卡信息
@@ -114,6 +116,7 @@ export default {
     },
   },
   methods: {
+    uploadUserInfo:uploadUserInfo,//获取用户详情
     //获取银行卡信息
     getBankInfo() {
       var params = {
@@ -220,7 +223,8 @@ export default {
       if (!!this.price) {
         if (parseFloat(this.price) <= 100000) {
           if (parseFloat(this.price) >= 50) {
-            if(parseFloat(this.userInfo.userBalance)<=parseFloat(this.price)){
+            console.log(parseFloat(this.userInfo.userBalance),parseFloat(this.price))
+            if(parseFloat(this.userInfo.userBalance)>=parseFloat(this.price)){
               this.showShopCar = true;
             }else{
               this.$toast({
@@ -254,7 +258,7 @@ export default {
         payPassword: this.password, //支付密码
         amount: parseFloat(this.price), //提现额度
       };
-      this.$http.post("userBank/saveOrUpdate", params).then(res => {
+      this.$http.post("userWithdrawDetail/save", params).then(res => {
         if (res.retCode == 0) {
           this.$toast.success({
             duration: 1000,
@@ -263,8 +267,12 @@ export default {
           });
           this.showShopCar = false;
           this.showKeyboard=false;
+           this.uploadUserInfo();
           this.$router.go(-1);//返回上一层
+        }else{
+          this.password='';
         }
+
       });
     },
     //点击支付完成按钮

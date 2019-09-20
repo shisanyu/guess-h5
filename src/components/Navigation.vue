@@ -45,10 +45,10 @@
             <p v-if="$store.state.userInfo">{{$store.state.userInfo.userBalance}}</p>
             <p v-else>0</p>
           </div>
-          <div class="item">
+          <!-- <div class="item">
             <label>奖金</label>
             <p>0.0</p>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="menu-list">
@@ -223,6 +223,7 @@ export default {
         color: #d7d4de;
         margin: 22px 0 40px;
         text-align: center;
+        min-height: 30px;
       }
       .header-main {
         display: flex;

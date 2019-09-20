@@ -26,7 +26,16 @@ export default {
   },
   methods: {
     getList() {
-
+      var params={
+        token:this.$store.state.token
+      }
+      this.$http.post("userBank/info", params).then(res => {
+        if (res.retCode == 0) {
+          if (!!res.data) {
+            this.bankInfo = res.data;
+          } 
+        }
+      });
     },
     // 显示内容详情
     toggleShow(item){

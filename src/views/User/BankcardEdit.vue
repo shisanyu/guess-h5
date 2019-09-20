@@ -87,7 +87,7 @@ export default {
       province: "", //省
       city: "", //城市
       bankName: "", //开户银行
-      provinceId: null, //省id
+      provinceId: 1, //省id
       cityId: null, //城市id
       bankId: null, //开户银行id
       bankBranch: "", //开户支行
@@ -104,6 +104,7 @@ export default {
   created() {
     if (!!this.$route.query.id) {
       this.$store.commit("setPageTitle", "编辑银行卡");
+      this.getBankInfo();
     } else {
       this.$store.commit("setPageTitle", "绑定银行卡");
     }
@@ -118,10 +119,26 @@ export default {
     getProvince() {
       this.getArea(1, 1);
     },
-    //获取市数据
-    getCity() {
-      // this.getArea(this.provinceId,2);
+    //获取银行卡信息
+    getBankInfo() {
+      var params={
+        token:this.$store.state.token
+      }
+      this.$http.post("userBank/info", params).then(res => {
+        if (res.retCode == 0) {
+          if (!!res.data) {
+            this.bankName=res.data.bankName//银行名称
+            this.bankUserName=res.data.bankUserName//开户用户
+            this.bankNo=res.data.bankNo//银行卡
+            this.province=res.data.bankProvince//省
+            this.city=res.data.bankCity//城市
+            this.bankBranch=res.data.bankBranch//开户支行
+          } 
+          this.getArea(1,1)
+        }
+      });
     },
+
     //获取省、市地区数据
     getArea(parentId, type) {
       //type为1：省，为2：市
@@ -133,10 +150,25 @@ export default {
           if (type == 1) {
             //省数据
             this.provinceList = res.data;
+            if(!!this.$route.query.id){//编辑回填
+              res.data.map((val,i)=>{
+                if(val.name==this.province){
+                  this.provinceIndex=i;
+                  this.provinceId=val.id
+                  this.getArea(this.provinceId, 2);
+                }
+              })
+            }
           } else if (type == 2) {
             //市数据
             this.cityList = res.data;
-            console.log(this.cityList, res.data);
+            if(!!this.$route.query.id){//编辑回填
+              res.data.map((val,i)=>{
+                if(val.name==this.city){
+                  this.cityIndex=i;
+                }
+              })
+            }
           }
         }
       });
@@ -222,7 +254,8 @@ export default {
       this.city = "";
       this.cityIndex = -1;
       this.province = value.name;
-      this.getArea(value.id, 2);
+      this.provinceId=value.id;
+      this.getArea(this.provinceId, 2);
       this.model1 = false;
     },
     //点击市

@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import {uploadUserInfo} from '@/utils/utils.js';
 export default {
   data() {
     return {
@@ -65,6 +66,7 @@ export default {
   },
   created() {},
   methods: {
+    uploadUserInfo:uploadUserInfo,//获取用户详情
     // 限制输入英文 数字
     onInputChange(key) {
       this.signIn[key] = this.signIn[key].replace(/[^\a-\z\A-\Z0-9]/g, "");
@@ -136,7 +138,9 @@ export default {
       this.$http.post("account/login", this.loginForm).then(res => {
         if (res.retCode == 0) {
           this.$store.commit("setToken", res.data.token);
-          this.getUserInfo(res.data.token)
+          this.uploadUserInfo();
+          this.$router.replace("/layout/home");
+         // this.getUserInfo(res.data.token)
         }
       });
     },
@@ -145,7 +149,7 @@ export default {
       this.$http.post("userInfo/userInfo", {token:token}).then(res => {
         if (res.retCode == 0) {
           this.$store.commit("setUserInfo", res.data);
-          this.$router.replace("/layout/home");
+          
         }
       });
     }

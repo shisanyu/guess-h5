@@ -21,6 +21,7 @@
 
 <script>
 import { regPhone } from "@/utils/utils.js";
+import {uploadUserInfo} from '@/utils/utils.js';
 export default {
   name: "ChangeMobile",
   data() {
@@ -43,6 +44,7 @@ export default {
   },
   mounted() {},
   methods: {
+    uploadUserInfo:uploadUserInfo,//获取用户详情
     //点击确认
     submit() {
       if (!regPhone(this.mobileNo)) {
@@ -63,9 +65,7 @@ export default {
             forbidClick: true, // 禁用背景点击
             message: "操作成功！"
           });
-          let userInfo = this.$store.state.userInfo;
-          userInfo.mobileNo = this.mobileNo;
-          this.$store.commit("setUserInfo",userInfo)
+           this.uploadUserInfo();
           this.$router.go(-1);//返回上一层
         }
       });

@@ -1,18 +1,19 @@
 <template>
   <div class="container">
-    <van-tabs v-model="active" :border="false">
-      <van-tab title="全部"></van-tab>
-      <van-tab title="充值"></van-tab>
-      <van-tab title="投注"></van-tab>
-      <van-tab title="提现"></van-tab>
+    <van-tabs v-model="active" :border="false" @change="changeTab">
+      <van-tab title="全部" name="0"></van-tab>
+      <van-tab title="充值" name="1"></van-tab>
       <van-tab title="结算"></van-tab>
-      <van-tab title="其他"></van-tab>
+      <van-tab title="提现" name="2"></van-tab>
+      <van-tab title="投注" name="3"></van-tab>
+      
+      <!-- <van-tab title="其他"></van-tab> -->
     </van-tabs>
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="getList">
       <div class="list-box">
         <div class="list between" v-for="(item,i) in listData" :key="i">
-          <div class="list-l">提现</div>
-          <div class="list-c">2019/04/04 13:24</div>
+          <div class="list-l">{{item.remark}}</div>
+          <div class="list-c">{{item.createTime|parseTime}}</div>
           <div class="list-r">+400</div>
         </div>
       </div>
@@ -25,23 +26,48 @@ export default {
   name: "stream",
   data() {
     return {
-      active: 1,
+      active: '',
       loading:false,//加载中
       finished:false,//没有更多数据
+      pageNum:0,
+      pageSize:10,
       listData: [],
     };
   },
   created() {
-    this.$store.commit("setPageTitle", "银行卡");
+    this.$store.commit("setPageTitle", "财务流水");
   },
   mounted() {},
   methods: {
+    //改变tab
+    changeTab(val){
+      console.log(val,'val')
+      this.pageNum=0;
+      this.listData=[];
+      this.getList();
+    },
     //获取数据
     getList(){
       // setTimeout(()=>{
       //   this.listData = this.listData.concat([{}, {}, {}, {}]);
       //   this.loading = false;
       // },500)
+      var params={
+        token:this.$store.state.token,
+        pageSize:this.pageSize,
+        pageNum:this.pageNum,
+        transactionType:this.active=="0"?'':this.active,
+      }
+      this.$http.post("userBalanceInfo/list", params).then(res => {
+        if (res.retCode == 0) {
+         this.listData = this.listData.concat(res.data);
+         this.pageNum++;
+          if(res.data.length < 10) {
+            this.finished = true;
+          }
+        }
+        this.loading = false;
+      });
     }
   }
 };
@@ -73,7 +99,7 @@ a {
 
 <style lang="css" scoped>
 .van-tabs >>> .van-tabs__wrap--scrollable .van-tab {
-  flex: 0 0 16.66% !important;
-  flex-basis: 16.66% !important;
+  flex: 0 0 20% !important;
+  flex-basis: 20% !important;
 }
 </style>

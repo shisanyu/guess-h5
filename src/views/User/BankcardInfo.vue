@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-      <div class="list-box">
+  <div class="container" v-if="bankInfo">
+      <div class="list-box" >
         <div class="label-text">开户名称</div>
         <div class="label-content">{{bankInfo.bankUserName}}</div>
       </div>
@@ -45,7 +45,7 @@ export default {
   methods: {
     //跳转编辑页面
     edit(){
-      this.$router.push({path:'/layout/BankcardEdit',query:{id:'2'}})
+      this.$router.push({path:'/layout/BankcardEdit',query:{id:this.bankInfo.id||null}})
     },
     //获取银行卡信息
     getBankInfo() {
